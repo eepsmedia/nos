@@ -168,3 +168,61 @@ div.paper {
     background-color: antiquewhite;
     padding : 1em;
 }
+
+/*
+    for index.html etc
+ */
+
+.indexBody {
+    margin: 2.0em;
+    background-color: #abc;
+}
+
+a:link { color:#579; text-decoration:none; font-weight:bold; }
+a:visited { color:#579; text-decoration:none; font-weight:bold; }
+a:hover { color:#9be; text-decoration:none; font-weight:bold; }
+a:active { color:#579; text-decoration:none; font-weight:bold; }
+
+
+.appSet {
+    margin-top: 1.0em;
+    border-radius: 1.0em;
+    background-color : #579;
+    display : flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* height: 222px; */
+
+}
+
+.appBox {
+    width : 222px;
+    display : inline-block;
+    position: relative;
+    padding : 8px;
+    margin : 12px;
+    border-radius: 12px;
+    background-color: white;		//	#860;
+    color: darkslategray;
+
+    font-family: "Helvetica Neue", "Verdana","sans-serif";
+}
+
+.appBoxText    {
+//	color : #ff0;
+//  position: absolute;
+    top: 4px;
+    left: 8px;
+    width: 100%;
+}
+
+.appBox h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-block-start: 0.0em;
+    margin-block-end: 0.0em;
+}
+
+.appBox p {
+    font-size: 0.8em;
+}
