@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+==========================================================================
+
+ * Created by tim on 8/24/18.
+ 
+ 
+ ==========================================================================
+journalWriter in nos2
+
+    Author:   Tim Erickson
+
+Copyright (c) 2018 by Epistemological Engineering. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+limitations under the License.
+==========================================================================
+
+
+  LOCAL, TESTING:         http://localhost:8888/plugins/nos2/nosJournalWriter.html
+    XYZ:           https://codap.xyz/plugins/nos2/nosJournalWriter.html
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Writer</title>
+
+    <!--firebase setup-->
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+
+    <script src="fireConnect.js"></script>
+
+
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Rokkitt:300,700' rel='stylesheet'>
+
+    <link rel="stylesheet" href="../common/jqueryFolder/jquery-ui.css">
+
+    <link rel='stylesheet' type='text/css' href='nos2.css'/>
+
+    <script src="../common/iframe-phone.js"></script>
+    <script src="../common/codapInterface.js"></script>
+    <script src="../common/pluginHelper.js"></script>
+    <script src="../common/TEEUtils.js"></script>
+    <script src="../common/jqueryFolder/jquery.min.js"></script>
+    <script src="../common/jqueryFolder/jquery-ui.min.js"></script>
+
+    <script src="nos2.js"></script>
+    <script src="fireConnect.js"></script>
+    <!--
+        <script src="CODAP_Connect.js"></script>
+    -->
+    <script src="Journal.js"></script>
+    <script src="userAction.js"></script>
+    <script src="writerUI.js"></script>
+    <script src="strings.js"></script>
+    <script src="Figure.js"></script>
+    <script src="Paper.js"></script>
+
+    <script src="scen/univ/Result.js"></script>
+
+    <script>
+        $(function () {
+            $("#tabs").tabs({
+                activate: (event, ui) => {
+                    const theNewTabName = ui.newTab[0].innerText;
+                    nos2.ui.changeTabTo(theNewTabName);
+                }
+            });
+
+            $("#figurePreview").dialog({
+                autoOpen: false,
+                width : 500,
+                height : 300,
+                show: {
+                    effect: "blind",
+                    duration: 200
+                },
+                hide: {
+                    effect: "blind",
+                    duration: 200
+                }
+
+            });
+
+            nos2.initialize();
+        });
+    </script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQAxZ9e0NmweiaF7lHS65bIIE-Lq1e3BU",
+            authDomain: "nature-of-science.firebaseapp.com",
+            databaseURL: "https://nature-of-science.firebaseio.com",
+            projectId: "nature-of-science",
+            storageBucket: "nature-of-science.appspot.com",
+            messagingSenderId: "199387340471",
+            appId: "1:199387340471:web:4f099d2196aacf624db732"
+        };
+
+    </script>
+
+</head>
+
+<body onload=`nos2.initialize("writer")`>
+
+<!-- for floating window! -->
+<div id="figurePreview"></div>
+
+<div id="writerStatusBarDiv" class="nosStatusBar"></div>
+
+<div id="joinWorldDiv" class="startup">
+    <h1>Join a World</h1>
+
+    <p>You need to get a world code from someone who has created a world.</p>
+    <label for="worldCodeBox">World code: </label>
+    <input type="text" id="worldCodeBox">
+    <button id="joinButton"
+            onclick="nos2.userAction.makeOrJoinWorld(false, document.getElementById('worldCodeBox').value)">
+        join
+    </button>
+    <br>
+</div>
+
+<div id="joinTeamDiv" class="startup">
+    <h1>Join a Team</h1>
+    <div id="chooseTeamFromListDiv"></div>
+
+</div>
+
+<div id="tabs">
+    <ul>
+        <li><a href="#list">list</a></li>
+        <li><a href="#writing">writing</a></li>
+        <li><a href="#journal">journal</a></li>
+    </ul>
+
+    <div id="list">
+        <h1>Paper Status</h1>
+<!--        <button id="statusRefreshButton" onclick="nos2.ui.update()">refresh list</button>-->
+        <div id="paperTaskTable"></div>
+
+    </div>
+
+    <div id="writing">
+        <h1>Writing Papers</h1>
+        <button id="savePaperButton" onclick="nos2.userAction.savePaper()">save as draft</button>
+        <button id="submitPaperButton" onclick="nos2.userAction.submitPaper()">save and submit for publication</button>
+        <button id="newPaperButton" onclick="nos2.userAction.newPaper()">new paper</button>
+        <button id="previewFigureButton" onclick="nos2.userAction.makeFigurePreview( )">preview Figure</button>
+
+
+        <br>
+
+        <table>
+            <tr>
+                <td><label for="paperStatusBox">status:</label></td>
+                <td id="paperStatusBox"></td>
+            </tr>
+            <tr>
+                <td><label for="paperTeamBox">team:</label></td>
+                <td><span id="paperTeamBox"></span></td>
+            </tr>
+        </table>
+
+        <!--        only visible if there is a currentPaper-->
+
+        <div id="viewPaperDIV"></div>
+        <div id="composePaperDIV">
+            <table>
+                <tr>
+                    <td><label for="paperTitleBox">title:</label></td>
+                    <td><input type="text" size="44" id="paperTitleBox" placeholder="give your paper a title"></td>
+                </tr>
+                <tr>
+                    <td><label for="paperAuthorsBox">authors:</label></td>
+                    <td><input type="text" size="44" id="paperAuthorsBox" placeholder="Fink & Snerd"></td>
+                </tr>
+                <tr>
+                    <td><label for="paperTextBox">text:</label></td>
+                    <td><textarea id="paperTextBox" placeholder="write your text here" rows="5" , cols="44"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="figureMenu">figure:</label></td>
+                    <td><select id="figureMenu" onchange="nos2.userAction.chooseOneFigure(this)"></select></td>
+                </tr>
+            </table>
+            <br>
+            <!--
+                    <button id="erasePaperButton" onclick="nos2.userAction.erasePaper()">erase</button>
+            -->
+
+            <!--    Section about figures -->
+
+            <details>
+                <summary>
+                    View figure(s)
+                </summary>
+
+                <div>
+                    <div id="oneFigureTitle"></div>
+                    <svg id="oneFigureImageContents" width="250"></svg>
+                    <div id="oneFigureCaption"></div>
+
+                </div>
+            </details>
+
+            <!--        references section    -->
+
+            <details>
+                <summary>references</summary>
+                <div id="referencesDIV"></div>
+            </details>
+        </div>
+
+        <!--        conversation section    -->
+
+        <details>
+            <summary>Messages with Reviewers</summary>
+            <div>
+                <div id="paperConvoHistory"></div>
+                <label for="messageTextBox">message:</label>
+                <button id="sendMessageButton" onclick="nos2.userAction.sendMessageFrom('author')">
+                    send to editor
+                </button>
+                <br>
+                <textarea id="messageTextBox" placeholder="Message to the editor" rows="5" , cols="44"></textarea>
+            </div>
+        </details>
+
+    </div>
+
+
+    <div id="journal">
+
+        <div id="journalDiv"></div>
+
+    </div>
+</div>
+
+</body>
+</html>

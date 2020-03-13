@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+==========================================================================
+
+ * Created by tim on 8/24/18.
+ 
+ 
+ ==========================================================================
+journalAdmin in nos2
+
+    Author:   Tim Erickson
+
+Copyright (c) 2018 by Epistemological Engineering. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+limitations under the License.
+==========================================================================
+
+
+  LOCAL, TESTING:         http://localhost:8888/plugins/nos2/nosJournalEditor.html
+  XYZ:         https://codap.xyz/plugins/nos2/nosJournalEditor.html
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reviewer</title>
+
+    <!--firebase setup-->
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+
+    <script src="fireConnect.js"></script>
+
+
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Rokkitt:300,700' rel='stylesheet'>
+
+    <link rel="stylesheet" href="../common/jqueryFolder/jquery-ui.css">
+
+    <link rel='stylesheet' type='text/css' href='nos2.css'/>
+
+    <script src="../common/TEEUtils.js"></script>
+    <script src="../common/jqueryFolder/jquery.min.js"></script>
+    <script src="../common/jqueryFolder/jquery-ui.min.js"></script>
+
+    <script src="nos2.js"></script>
+    <script src="fireConnect.js"></script>
+
+    <script src="Journal.js"></script>
+    <script src="userAction.js"></script>
+    <script src="editorUI.js"></script>
+    <script src="strings.js"></script>
+
+    <script src="Paper.js"></script>
+    <script src="Figure.js"></script>
+
+    <script src="scen/univ/Result.js"></script>
+
+    <script>
+        $(function () {
+            $("#tabs").tabs();
+            $("#figurePreview").dialog({
+                autoOpen: false,
+
+                show: {
+                    effect: "blind",
+                    duration: 200
+                },
+                hide: {
+                    effect: "blind",
+                    duration: 200
+                }
+
+            });
+            nos2.initialize();
+        });
+
+    </script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQAxZ9e0NmweiaF7lHS65bIIE-Lq1e3BU",
+            authDomain: "nature-of-science.firebaseapp.com",
+            databaseURL: "https://nature-of-science.firebaseio.com",
+            projectId: "nature-of-science",
+            storageBucket: "nature-of-science.appspot.com",
+            messagingSenderId: "199387340471",
+            appId: "1:199387340471:web:dfa5ad1aec4cfb484db732"
+        };
+
+    </script>
+
+</head>
+<body onload=`nos2.initialize(6)`>
+
+<div id="figurePreview">
+
+</div>
+
+<div id="editorStatusBarDiv" class="nosStatusBar">
+
+</div>
+
+<div id="editorJoinWorldDiv" class="startup">
+    <h1>Join a World</h1>
+
+    <p>You need to get a world code from someone who has created a world.
+        If that person is you, create a world
+        <a href="journalAdmin.html" target="_blank">by following this link</a>.</p>
+    <label for="worldCodeBox">World code: </label>
+    <input type="text" id="worldCodeBox">
+    <button id="joinButton"
+            onclick="nos2.userAction.makeOrJoinWorld(false, document.getElementById('worldCodeBox').value)">
+        join
+    </button>
+    <br>
+</div>
+
+
+<div id="tabs">
+    <ul>
+        <li><a href="#list">list</a></li>
+        <li><a href="#reviewing">reviewing</a></li>
+        <li><a href="#teams">team info</a></li>
+        <li><a href="#journal">journal</a></li>
+    </ul>
+
+
+    <div id="list">
+        <h1>Editor Task List</h1>
+<!--        <button id="paperListRefreshButton" onclick="nos2.ui.update()">refresh list</button>-->
+        <div id="paperTaskTable"></div>
+    </div>
+
+    <!--    REVIEWING tab  -->
+
+    <div id="reviewing">
+        <h1>Reviewing Papers</h1>
+
+        <div id="yesPaperToReview">
+            <div id="reviewPaperGuts"></div>        <!--  displays the paper -->
+
+            <button id="acceptPaperButton" onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusPublished)">accept</button>
+            <button id="rejectPaperButton" onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusRejected)">reject</button>
+            <button id="revisePaperButton" onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusRevise)">revise</button>
+            <button id="previewFigureButton" onclick="nos2.userAction.makeFigurePreview( )">figure preview</button>
+
+            <!--        conversation section    -->
+            <details>
+                <summary>Messages with the Authors</summary>
+                <div>
+                    <div id="paperConvoHistory"></div>
+                    <label for="messageTextBox">message:</label>
+                    <button id="sendMessageButton" onclick="nos2.userAction.sendMessageFrom('editor')">
+                        send to authors
+                    </button>
+                    <br>
+                    <textarea id="messageTextBox" placeholder="Message to the authors" rows="5", cols="44"></textarea>
+                </div>
+
+            </details>
+        </div>
+
+        <div id="noPaperToReview">
+            <p>You have not selected a paper to review. Check the list!</p>
+        </div>
+    </div>
+
+
+    <div id="teams">
+        <h1>Team Info</h1>
+<!--        <button id="editorTeamInfoRefreshButton" onclick="nos2.ui.update()">refresh teams</button>-->
+        <div id="editorTeamInfoDiv"></div>
+    </div>
+
+
+    <div id="journal">
+        <div id="journalDiv"></div>
+    </div>
+</div>
+
+</body>
+</html>
