@@ -56,20 +56,6 @@ univ.CODAPconnect = {
         const updateResult = await codapInterface.sendRequest(tMessage);
     },
 
-/*
-    saveItemsToCODAP: async function (iValues) {
-
-        const makeItemsMessage = {
-            action : "create",
-            resource : "dataContext[" + univ.constants.kUnivDataSetName + "].item",
-            values : iValues
-        };
-
-        const createItemsResult = await codapInterface.sendRequest(makeItemsMessage);
-
-    },
-*/
-
     /**
      *
      * @param iResult       a single Result or an array of Results
@@ -83,7 +69,8 @@ univ.CODAPconnect = {
 
         let codapValues = [];
         iResult.forEach( r => {
-            codapValues.push(r.toCODAPValuesObject());
+            const plainObject = r.toCODAPValuesObject();
+            codapValues.push(plainObject);
         });
 
         const createItemsMessage = {
@@ -223,11 +210,12 @@ univ.CODAPconnect = {
                 },
 
                 attrs: [ // note how this is an array of objects.
-                    {name: "dbid", type: 'categorical', description: "database ID"},
+                    {name: "dbid", type: 'categorical', description: "database ID", hidden : true},
                     {name: "R", type: 'numeric', precision : 0, description: "# red"},
                     {name: "O", type: 'numeric', precision : 0, description: "# orange"},
                     {name: "G", type: 'numeric', precision : 0, description: "# blue"},
                     {name: "B", type: 'numeric', precision : 0, description: "# green"},
+                    {name: "where", type: 'categorical', description: "label of the upper left corner square"},
                     {name: "col", type: 'numeric', precision : 0, description: "column of upper left corner"},
                     {name: "row", type: 'numeric', precision : 0, description: "row of upper left corner"},
                     {name: "epoch", type: 'numeric', precision : 0, description: "when was this observation made?"},

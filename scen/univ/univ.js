@@ -160,6 +160,21 @@ let univ = {
         await univ.CODAPconnect.saveResultsToCODAP(tNewResult);  //  store it in CODAP. This has the dbid field.
     },
 
+    convertCoordinatesToLabel : function(iPoint) {
+        const [col, row] = iPoint;
+        const theLetters = ["A","B","C","D","E","F","G","H","J","K","L","M"];
+        let out = "";
+
+        if (row === -1) {
+            out = (col === -1) ? "" : theLetters[col];
+        } else if (col === -1) {
+            out = (row === -1) ? "" : row + 1;
+        } else {
+            out = `${theLetters[col]}${row + 1}`;
+        }
+
+        return out;
+    },
 
     convertCODAPValuesToResults : function( iValues, iSelected) {
         let out = [];
@@ -205,6 +220,7 @@ let univ = {
         nos2.ui.update();
         $( "#tabs" ).tabs(  "option", "active", iTab );
     },
+
 
     colors: {
         "R": "tomato",

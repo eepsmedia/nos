@@ -2,8 +2,8 @@
 ==========================================================================
 
  * Created by tim on 9/22/18.
- 
- 
+
+
  ==========================================================================
 universeView in 4color
 
@@ -92,33 +92,41 @@ univ.telescopeView = {
         const w = this.thePaper.attr("width");
         const h = this.thePaper.attr("height");
         const wh = w < h ? w : h;   //  smaller of the two, so everything fits
-        const box = wh / univ.model.size;
+        const box = wh / (univ.model.size + 1);     //  +1 for row/col labels
 
-        for (let row = 0; row < univ.model.size; row++) {
-            for (let col = 0; col < univ.model.size; col++) {
-                const tx = col * box + 1;
-                const ty = row * box + 1;
-                const theLetter = iArray[col][row];
-                const tColor = theLetter ? univ.colors[theLetter] : "black";
+        for (let row = -1; row < univ.model.size; row++) {
+            for (let col = -1; col < univ.model.size; col++) {
 
-                let tr = this.thePaper.rect(tx, ty, box - 2, box - 2).attr({"fill": tColor});
+                const tx = (col + 1) * box + 1;
+                const ty = (row + 1) * box + 1;
 
-                //  set up the handlers for mouse over and mouse up
+                if (row === -1 || col === -1) {
+                    const theLabel = univ.convertCoordinatesToLabel([col, row]);
+                    this.thePaper.text(tx + 2, ty + box - 4, theLabel);
+                } else {
+                    let tr = this.thePaper.rect(tx, ty, box - 2, box - 2);
+                    const theLetter = iArray[col][row];
+                    const tColor = theLetter ? univ.colors[theLetter] : "gray";
 
-                tr.mouseover(e => {
-                    this.possiblePoint = [col, row];
-                    const tA = this.prepareArray();
-                    this.drawArray(tA);
-                }).mouseup(e => {
-                    this.selectedPoint = [col, row];
-                    const tA = this.prepareArray();
-                    this.drawArray(tA);
+                    tr.attr({"fill": tColor});
 
-                    //  when pointing changes, blank the latest result display
-                    this.latestResult = null;
-                    nos2.ui.update();
+                    //  set up the handlers for mouse over and mouse up
 
-                });
+                    tr.mouseover(e => {
+                        this.possiblePoint = [col, row];
+                        const tA = this.prepareArray();
+                        this.drawArray(tA);
+                    }).mouseup(e => {
+                        this.selectedPoint = [col, row];
+                        const tA = this.prepareArray();
+                        this.drawArray(tA);
+
+                        //  when pointing changes, blank the latest result display
+                        this.latestResult = null;
+                        nos2.ui.update();
+
+                    });
+                }
             }
         }
     },
@@ -126,8 +134,8 @@ univ.telescopeView = {
     displayTelescopeLocation() {
         const tTelescopeLocationText = document.getElementById("telescopeLocationText");
         if (this.selectedPoint) {
-            tTelescopeLocationText.innerHTML = "Upper left at col = " +
-                this.selectedPoint[0] + ", row = " + this.selectedPoint[1];
+            tTelescopeLocationText.innerHTML =
+                "Upper left at " + univ.convertCoordinatesToLabel(this.selectedPoint);
         } else {
             tTelescopeLocationText.innerHTML = "Click in the grid to point";
         }

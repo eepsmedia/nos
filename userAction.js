@@ -243,7 +243,6 @@ nos2.userAction = {
         nos2.currentPaper.guts.text = $('#paperTextBox').val();
 
         const theDBID = await fireConnect.savePaperToDB(nos2.currentPaper);    //  send the Paper
-        //  nos2.thePapers[theDBID] = nos2.currentPaper; //  save in local object todo: not necessary when we use notifications
 
         await nos2.ui.update();
     },

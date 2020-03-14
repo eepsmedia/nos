@@ -100,11 +100,6 @@ univ.dataView = {
 
         }
     },
-/*
-    addResult : function(iResult) {
-        this.results.push(iResult);
-    },
-*/
 
     displaySomeResults : function( iResults ) {
 
@@ -140,11 +135,12 @@ univ.dataView = {
             this.thePaper.append(pq.attr({ x: plaqueX, y : plaqueY }));
 
             //  draw the shaded box in the grid
-            const rectX = this.gridLeft + (r.data.col * this.box) + 1;
-            const rectY = (r.data.row * this.box) + 1;
+            const rectX = this.gridLeft + this.box + (r.data.col * this.box) + 1;
+            const rectY = this.box + (r.data.row * this.box) + 1;
             const rectW = (Number(r.data.dim) * this.box) - 2;
             const theColor = r.selected ? univ.colors.selected : univ.colors.unselected;
-            const theObservation = this.thePaper.rect(rectX, rectY, rectW, rectW).attr({fill : theColor, "fill-opacity" : 0.4});
+            const theObservation = this.thePaper.rect(rectX, rectY, rectW, rectW)
+                .attr({fill : theColor, "fill-opacity" : 0.4});
             theObservation.click( e => r.toggleSelection() );   //  note the function call!
 
             const lineEndX = rectX + rectW/2;
@@ -173,32 +169,37 @@ univ.dataView = {
         const w = Number(this.thePaper.attr("width"));
         const h = Number(this.thePaper.attr("height"));
         const wh = w < h ? w : h;   //  smaller of the two, so everything fits
-        this.box = wh/univ.model.size;
+        this.box = wh/(univ.model.size + 1);
 
         //  assume w > h for this view.
 
         this.gridLeft = (w - h) / 2;
         this.gridRight = this.gridLeft + h;
 
-        for (let row=0; row < univ.model.size; row++) {
-            for (let col=0; col < univ.model.size; col++) {
-                const tx = col * this.box + 1;
-                const ty = row * this.box + 1;
-                const theLetter = iArray[col][row];
-                const tColor =  theLetter ? this.colors[theLetter] : "black";
+        for (let row= -1; row < univ.model.size; row++) {
+            for (let col= -1; col < univ.model.size; col++) {
+                const tx = (col + 1) * this.box + 1;
+                const ty = (row + 1) * this.box + 1;
 
-                let tr = this.thePaper.rect(this.gridLeft + tx, ty, this.box - 2, this.box - 2).attr({"fill" : tColor});
-                tr.mouseup( e => {
-                    console.log("Mouse up in " + JSON.stringify([col, row]));
-                    nos2.ui.update();
+                if (row === -1 || col === -1) {
+                    const theLabel = univ.convertCoordinatesToLabel([col, row]);
+                    this.thePaper.text(this.gridLeft + tx + 2, ty + this.box - 4, theLabel);
+                } else {
+                    const theLetter = iArray[col][row];
+                    const tColor = theLetter ? this.colors[theLetter] : "black";
 
-                }).mouseover(e => {
-                    this.possiblePoint = [col, row];
-/*
-                    const tA = this.prepareArray();
-                    this.drawArray(tA);
-*/
-                });
+                    let tr = this.thePaper.rect(
+                        this.gridLeft + tx, ty,
+                        this.box - 2,
+                        this.box - 2)
+                        .attr({"fill": tColor});
+                    tr.mouseup(e => {
+                        console.log("Mouse up in " + JSON.stringify([col, row]));
+                        nos2.ui.update();
+                    }).mouseover(e => {
+                        this.possiblePoint = [col, row];
+                    });
+                }
             }
         }
     },

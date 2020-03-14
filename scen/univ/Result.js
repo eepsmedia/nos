@@ -52,7 +52,8 @@ class Result {
     toCODAPValuesObject() {
         //  flattened
 
-        let out = this.data;
+        let out = this.data
+        out.where = univ.convertCoordinatesToLabel([this.data.col, this.data.row]);
         out.dbid = this.dbid;
         out.epoch = this.epoch;
         out.teamCode = this.teamCode;
