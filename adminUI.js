@@ -101,8 +101,9 @@ nos2.ui = {
                 tWorlds.forEach(w => {
                     console.log(`Admin lists world ${w.code}`);
                     text += "<tr><td>" + w.code + "</td>"
-                        + `<td>${w.nickname}</td>`
-                        + `<td><button onclick="nos2.userAction.makeOrJoinWorld(false,'${w.code}')">join</button> </td></tr>`;
+                        + `<td>${w.nickname}</td>
+                        <td><button onclick="nos2.userAction.makeOrJoinWorld(false,'${w.code}')">join</button>
+                        </td></tr>`;
                 });
                 text += "</table>";
                 tWorldDiv.innerHTML = text;
@@ -142,11 +143,13 @@ nos2.ui = {
 
         const tTeamsListDiv = document.getElementById("teamsListDiv");
 
+        //  alternate money emoji: 💰    💵
+
         if (tTeams.length > 0) {
             let text = "<table><tr><th>code</th><th>name</th><th>balance</th></tr>";
             tTeams.forEach(t => {
                 text += "<tr><td>" + t.teamCode + "</td><td>" + t.teamName + "</td><td>" + t.balance + "</td>"
-                    + `<td><span class="spanButton" onclick="nos2.userAction.giveGrant('${t.teamCode}')">💰</span></td>`
+                    + `<td><span class="moneyButton" onclick="nos2.userAction.giveGrant('${t.teamCode}')">💵</span></td>`
                     + "</tr>";
                 // + "<td><button onclick='nos2.userAction.joinWorldByID(" + w.id + ", \"" + w.code + "\")'>join</button> </td></tr>";
             });

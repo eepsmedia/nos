@@ -91,12 +91,14 @@ let nos2 = {
         kEditorPhasePlaying: 199,
 
         kTrashCan: "\uD83D\uddd1",
+    },
 
-        freshState: {
+    freshState : function() {
+        return {
             worldCode: null,
             teamCode: null,      //  the "team" we are in (the ID)
             teamName: null,    //  full name of the team
-        },
+        }
     },
 
     clearVariableValues: function() {
@@ -108,7 +110,7 @@ let nos2 = {
 
         nos2.journalName = "";
 
-        nos2.state = nos2.constants.freshState;     //  teamCode, teamName, worldCode
+        nos2.state = nos2.freshState();     //  teamCode, teamName, worldCode
 
         nos2.theWorld = {};
         nos2.theTeams = {};

@@ -63,7 +63,13 @@ class Result {
     }
 
     toString() {
-        return (this.data.R + "R." + this.data.O + "O." + this.data.G + "G." + this.data.B + "B");
+        const theLabel = univ.convertCoordinatesToLabel([this.data.col,this.data.row]);
+        const theSizeString = `${this.data.dim}x${this.data.dim}`;
+        return `${theLabel} ${theSizeString} ${this.toShortString()}`;
+    }
+
+    toShortString() {
+        return `${this.data.R}R.${this.data.O}O.${this.data.G}G.${this.data.B}B`;
     }
 
     plaque() {
@@ -87,7 +93,7 @@ class Result {
 
         //  draw the text
 
-        let theText = paper.text(3, 18, this.toString());
+        let theText = paper.text(3, 18, this.toShortString());
         theText.addClass("plaqueText");
 
         return paper;

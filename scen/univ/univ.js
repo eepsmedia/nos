@@ -156,8 +156,8 @@ let univ = {
 
         const tNewResult = await fireConnect.saveResultToDB(new Result(data));
         univ.telescopeView.latestResult = tNewResult;       //  make sure the telescope knows for its display
-        nos2.theResults[tNewResult.dbid] = tNewResult;
-        await univ.CODAPconnect.saveResultsToCODAP(tNewResult);  //  store it in CODAP. This has the dbid field.
+        //  nos2.theResults[tNewResult.dbid] = tNewResult;
+        //  await univ.CODAPconnect.saveResultsToCODAP(tNewResult);  //  store it in CODAP. This has the dbid field.
     },
 
     convertCoordinatesToLabel : function(iPoint) {

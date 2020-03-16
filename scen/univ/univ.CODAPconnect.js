@@ -37,7 +37,7 @@ univ.CODAPconnect = {
         nos2.state = await codapInterface.getInteractiveState();
 
         if (jQuery.isEmptyObject(nos2.state)) {
-            await codapInterface.updateInteractiveState(nos2.constants.freshState);
+            await codapInterface.updateInteractiveState(nos2.freshState());
             console.log("univ/nos2: getting a fresh state");
         }
         console.log("nos2.state is " + JSON.stringify(nos2.state));   //  .length + " chars");
@@ -67,32 +67,34 @@ univ.CODAPconnect = {
             iResult = [ iResult ];
         }
 
-        let codapValues = [];
-        iResult.forEach( r => {
-            const plainObject = r.toCODAPValuesObject();
-            codapValues.push(plainObject);
-        });
+        if (iResult.length > 0) {
+            let codapValues = [];
+            iResult.forEach(r => {
+                const plainObject = r.toCODAPValuesObject();
+                codapValues.push(plainObject);
+            });
 
-        const createItemsMessage = {
-            action : "create",
-            resource : "dataContext[" + univ.constants.kUnivDataSetName + "].item",
-            values : codapValues
-        };
+            const createItemsMessage = {
+                action: "create",
+                resource: "dataContext[" + univ.constants.kUnivDataSetName + "].item",
+                values: codapValues
+            };
 
-        //  actually create the items
-        const createItemsResult = await codapInterface.sendRequest(createItemsMessage);
+            //  actually create the items
+            const createItemsResult = await codapInterface.sendRequest(createItemsMessage);
 
-        fireStoreToCODAPMaps.addResultsAndResponses(iResult, createItemsResult);    //  update ID maps
+            fireStoreToCODAPMaps.addResultsAndResponses(iResult, createItemsResult);    //  update ID maps (caseID to dbid)
 
-        //  make the case table in case it's not present
-        codapInterface.sendRequest({
-            "action": "create",
-            "resource": "component",
-            "values": {
-                "type": "caseTable",
-                "dataContext": univ.constants.kUnivDataSetName,
-            }
-        })
+            //  make the case table in case it's not present
+            codapInterface.sendRequest({
+                "action": "create",
+                "resource": "component",
+                "values": {
+                    "type": "caseTable",
+                    "dataContext": univ.constants.kUnivDataSetName,
+                }
+            })
+        }
 
     },
 

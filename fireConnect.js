@@ -107,7 +107,7 @@ fireConnect = {
             known: thisTeam.known
         });
 
-        console.log(`Team ${thisTeam.teamCode} knows results ${thisTeam.known.toString()}`);
+        console.log(`Team ${thisTeam.teamCode} knows ${thisTeam.known.length} results ${thisTeam.known.toString()}`);
     },
 
     getWorldCount: async function() {
@@ -313,7 +313,7 @@ fireConnect = {
             //      and, by the way,
             await fireConnect.assertKnownResult(tDBID);
 
-            return (iResult);       //  just the dbid
+            return (iResult);       //  the entire Result
         } catch (msg) {
             console.log('saveResultToDB() error: ' + msg);
             return null;
@@ -330,7 +330,7 @@ fireConnect = {
         //  in case this paper has never been saved, get a (new) dbid.
         //  if it has been saved, we'll simply save over it.
 
-        let paperDR = null;
+        let paperDR;
 
         if (!iPaper.guts.dbid) {
             paperDR = this.papersCR.doc();
@@ -388,8 +388,17 @@ fireConnect = {
     },
 
     deleteFigureByDBID: async function (iDBID) {
-        const theDR = this.figuresCR.doc(iDBID);
-        theDR.delete();
+        if (iDBID) {
+            const theDR = this.figuresCR.doc(iDBID);
+            theDR.delete();
+        }
+    },
+
+    deletePaperByDBID: async function (iDBID) {
+        if (iDBID) {
+            const theDR = this.papersCR.doc(iDBID);
+            theDR.delete();
+        }
     },
 
     getAllResults: async function () {

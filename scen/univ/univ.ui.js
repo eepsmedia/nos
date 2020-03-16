@@ -47,7 +47,7 @@ nos2.ui = {
 
         //  status bar
 
-        const theBalance = nos2.state.teamCode ?  nos2.theTeams[nos2.state.teamCode].balance : 0;
+        const theBalance = nos2.state.teamCode ? nos2.theTeams[nos2.state.teamCode].balance : 0;
 
         document.getElementById("univStatusBarDiv").innerHTML =
             (nos2.state.worldCode ? `${nos2.state.worldCode} | ` : "") +
@@ -64,10 +64,9 @@ nos2.ui = {
                 onClick="nos2.ui.update()">`
         ;
 
-/*
-    <span class="refreshSpan" onclick="nos2.ui.update()">🔄</span>
-*/
-
+        /*
+            <span class="refreshSpan" onclick="nos2.ui.update()">🔄</span>
+        */
 
 
         //  choose team list. ONLY IN THE APPROPRIATE PHASE!
@@ -111,39 +110,58 @@ nos2.ui = {
 
         this.updateEditFigureSection();
 
+        this.installFigureLists();
+
+        //  update the full journal
+        document.getElementById("journalDiv").innerHTML = await nos2.journal.constructJournalHTML();
+
+    },
+
+    installFigureLists: function () {
         //  Figure archive
 
         const theFiguresListElement = document.getElementById("figuresList");
         let figureListGuts = "";
         let figuresListCount = 0;
 
+        let oldFigureListGuts = "";
+        let oldFigureListCount = 0;
+
         Object.keys(nos2.theFigures).forEach(dbid => {
             const theClass = "figureInList";
             const fig = nos2.theFigures[dbid];
-            if (fig.guts.creator === nos2.state.teamCode && !fig.guts.citation) {
-                figuresListCount++;
-                let thisDiv;
+            if (fig.guts.creator === nos2.state.teamCode) {
                 if (fig.guts.citation) {
-                    thisDiv =
+                    oldFigureListCount++;
+                    const paperCitation = nos2.thePapers[fig.guts.citation].guts.citation;
+                    let thisDiv =
                         `<div class='${theClass}' > 
-                        ${fig.guts.text.title} (${fig.guts.source})
+                        ${fig.guts.text.title} (${paperCitation})
                      </div>`;
+                    oldFigureListGuts += thisDiv;
                 } else {
-                    thisDiv =
+                    figuresListCount++;
+                    let thisDiv =
                         `<div class='${theClass}' > 
                         <button onclick="univ.userAction.makeFigureCurrentByDBID('${dbid}')">edit</button>
                         ${fig.guts.text.title} 
-                        <span class="spanButton" onclick="univ.userAction.deleteFigureByDBID('${dbid}')">${nos2.constants.kTrashCan}</span>
+                        <span class="spanButton" onclick="univ.userAction.deleteFigureByDBID('${dbid}')">
+                            ${nos2.constants.kTrashCan}
+                        </span>
                      </div>`;
+                    figureListGuts += thisDiv;
                 }
-                figureListGuts += thisDiv;
             }
         });
 
-        theFiguresListElement.innerHTML = `${figureListGuts}`;
+        theFiguresListElement.innerHTML =
+            `<h2>Figures you can edit</h2>
+                ${figureListGuts}
+             <h2>Figures in publications</h2>
+                 ${oldFigureListGuts}
+                `;
 
     },
-
 
     updateEditFigureSection: function () {
         const theMakeEditFigureTabGutsElement = document.getElementById("makeFigureTabGuts");

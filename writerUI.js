@@ -141,6 +141,7 @@ nos2.ui = {
                 document.getElementById("newPaperButton").style.display = "none";
                 document.getElementById("savePaperButton").style.display = "block";
                 document.getElementById("submitPaperButton").style.display = "block";
+                document.getElementById("discardPaperButton").style.display = "block";
 
                 document.getElementById('paperStatusBox').innerHTML = "(" + thePaper.guts.status + ")";    //  .innerHTML because it's a <td>
                 document.getElementById('paperTitleBox').value = thePaper.guts.title;    //  .value because it's an <input>
@@ -175,14 +176,15 @@ nos2.ui = {
                 viewDIV.style.display = "block";
                 viewDIV.innerHTML = thePaperHTML;
 
-                document.getElementById('paperStatusBox').innerHTML = "(" + thePaper.guts.status + ")";    //  .innerHTML because it's a <td>
-                document.getElementById('paperConvoHistory').innerHTML = thePaper.guts.convo;
+                document.getElementById('paperStatusBox').textContent = "(" + thePaper.guts.status + ")";    //  .innerHTML because it's a <td>
+                document.getElementById('paperConvoHistory').textContent = thePaper.guts.convo;
             }
         } else {
             editDIV.style.display = "none";
             viewDIV.style.display = "none";
             document.getElementById("savePaperButton").style.display = "none";
             document.getElementById("submitPaperButton").style.display = "none";
+            document.getElementById("discardPaperButton").style.display = "none";
             document.getElementById("newPaperButton").style.display = "block";
             document.getElementById('paperStatusBox').innerHTML = "no paper selected";    //  .innerHTML because it's a <td>
         }
@@ -202,12 +204,13 @@ nos2.ui = {
     makeFigureMenuOptions: async function () {
 
         //  nos2.theFigures is a keyed object of Figures, ordered by dbid.
-        //  todo:  to be kept current through notification (but not yet!)
 
         let tFigures = [];
         Object.keys(nos2.theFigures).forEach(fk => {
             const f = nos2.theFigures[fk];
-            tFigures.push(f);
+            if (f.guts.creator === nos2.state.teamCode) {
+                tFigures.push(f);
+            }
         });
 
         const tCurrentFigureDBID = nos2.currentFigure ? nos2.currentFigure.guts.dbid : null;

@@ -28,8 +28,8 @@ limitations under the License.
 ==========================================================================
 
 
-  LOCAL, TESTING:         http://localhost:8888/plugins/nos2/nosJournalWriter.html
-    XYZ:           https://codap.xyz/plugins/nos2/nosJournalWriter.html
+  LOCAL, TESTING:         http://localhost:8888/nos/nosJournalWriter.html
+    XYZ:           https://codap.xyz/nos/nosJournalWriter.html
 -->
 
 <head>
@@ -85,8 +85,8 @@ limitations under the License.
 
             $("#figurePreview").dialog({
                 autoOpen: false,
-                width : 500,
-                height : 300,
+                width: 500,
+                height: 300,
                 show: {
                     effect: "blind",
                     duration: 200
@@ -152,17 +152,22 @@ limitations under the License.
 
     <div id="list">
         <h1>Paper Status</h1>
-<!--        <button id="statusRefreshButton" onclick="nos2.ui.update()">refresh list</button>-->
+        <!--        <button id="statusRefreshButton" onclick="nos2.ui.update()">refresh list</button>-->
         <div id="paperTaskTable"></div>
 
     </div>
 
     <div id="writing">
         <h1>Writing Papers</h1>
-        <button id="savePaperButton" onclick="nos2.userAction.savePaper()">save as draft</button>
-        <button id="submitPaperButton" onclick="nos2.userAction.submitPaper()">save and submit for publication</button>
-        <button id="newPaperButton" onclick="nos2.userAction.newPaper()">new paper</button>
-        <button id="previewFigureButton" onclick="nos2.userAction.makeFigurePreview( )">preview Figure</button>
+        <span style="display:inline">
+            <button id="savePaperButton" onclick="nos2.userAction.savePaper()">save as draft</button>
+            <button id="submitPaperButton" onclick="nos2.userAction.submitPaper()">save and submit</button>
+            <button id="newPaperButton" onclick="nos2.userAction.newPaper()">new paper</button>
+            <button id="discardPaperButton" onclick="nos2.userAction.discardPaper()">discard this paper</button>
+        </span>
+        <!--
+                <button id="previewFigureButton" onclick="nos2.userAction.makeFigurePreview( )">preview Figure</button>
+        -->
 
 
         <br>
@@ -210,12 +215,12 @@ limitations under the License.
 
             <details>
                 <summary>
-                    View figure(s)
+                    view figure(s)
                 </summary>
 
                 <div>
                     <div id="oneFigureTitle"></div>
-                    <svg id="oneFigureImageContents" width="250"></svg>
+                    <svg id="oneFigureImageContents" width="333"></svg>
                     <div id="oneFigureCaption"></div>
 
                 </div>
@@ -232,9 +237,10 @@ limitations under the License.
         <!--        conversation section    -->
 
         <details>
-            <summary>Messages with Reviewers</summary>
+            <summary>messages with reviewers</summary>
             <div>
                 <div id="paperConvoHistory"></div>
+                <hr>
                 <label for="messageTextBox">message:</label>
                 <button id="sendMessageButton" onclick="nos2.userAction.sendMessageFrom('author')">
                     send to editor

@@ -90,6 +90,9 @@ h2 {
     width : 500px;
 }
 
+#savePaperButton, #discardPaperButton, #newPaperButton, #submitPaperButton {
+    display: inline-block;
+}
 p, li {
     font-family: 'IBM Plex Sans Condensed', sans-serif; font-size: 14px;
     font-weight: 300;
@@ -144,6 +147,11 @@ details[open] {
 
 .spanButton {
     cursor : pointer;
+}
+
+.moneyButton {
+    cursor : pointer;
+    font-size: 20px;
 }
 
 .refreshSpan, .refreshButton{

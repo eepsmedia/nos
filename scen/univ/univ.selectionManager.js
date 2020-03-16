@@ -29,6 +29,12 @@ limitations under the License.
 
 univ.selectionManager = {
 
+    /**
+     * Note: we cannot rely on this to help us set ALL selected cases, because each event
+     * contains only the most recent new selected caseIDs, not the entire selection.
+     *
+     * @param iCommand
+     */
     codapSelectsCases : function( iCommand ) {
         console.log("Got selection in univ! ... " );
 
@@ -39,18 +45,24 @@ univ.selectionManager = {
             const selectedDBIDs = [];
 
             //  make an array of the selected dbids. Relies on the dbids in CODAP to be correct
-            theCases.forEach((c) => {
-                const thedbid = c.values.dbid;
-                if (thedbid) {
-                    selectedDBIDs.push(thedbid);
-                }
-            });
-            console.log("   selected dbids:  " + JSON.stringify(selectedDBIDs) );
+/*
+            if (theCases) {
+                theCases.forEach((c) => {
+                    const thedbid = c.values.dbid;
+                    if (thedbid) {
+                        selectedDBIDs.push(thedbid);
+                    }
+                });
+                console.log("   selected dbids:  " + JSON.stringify(selectedDBIDs));
+            }
+*/
 
-            //  update the Results in dataView (not ALL Results) to relflect the selection
+            //  update the Results in dataView (not ALL Results) to reflect the selection
+/*
             univ.dataView.results.forEach( res => {
                 res.selected = (selectedDBIDs.includes(res.dbid));
             })
+*/
         }
 
         univ.dataView.redraw();   //  because we might change what we display

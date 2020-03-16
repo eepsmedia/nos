@@ -108,9 +108,12 @@ nos2.ui = {
         });
 
         const tPapersDiv = document.getElementById("paperTaskTable");
+        const tDonePapersDiv = document.getElementById("doneTaskTable");
 
         let tPaperCount = 0;
+        let tDoneCount = 0;
         let text = "<table><tr><th>id</th><th>title</th><th>status</th><th>team</th></tr>";
+        let doneTable = "<table><tr><th>citation</th><th>title</th><th>status</th><th>team</th></tr>";
 
         if (Array.isArray(thePapers)) {
             thePapers.forEach(p => {
@@ -121,6 +124,13 @@ nos2.ui = {
                     text += "<td>" + p.guts.status + "</td>";
                     text += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
                     text += "</tr>";
+                } else {
+                    tDoneCount++;
+                    doneTable += `<tr><td>${p.guts.citation ? p.guts.citation : "-"}</td>`;
+                    doneTable += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button>&emsp;${p.guts.title}</td>`;
+                    doneTable += "<td>" + p.guts.status + "</td>";
+                    doneTable += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
+                    doneTable += "</tr>";
                 }
             });
         }
@@ -132,6 +142,13 @@ nos2.ui = {
                 + "to deal with</p>" + text;
         } else {
             tPapersDiv.innerHTML = "<p>Hooray! All caught up!</p>";
+        }
+        if (tDoneCount > 0) {
+            tDonePapersDiv.innerHTML = "<p>"
+                + tDoneCount + (tPaperCount === 1 ? " paper " : " papers ")
+                + "you're done with (for now)</p>" + doneTable;
+        } else {
+            tPapersDiv.innerHTML = "<p>Stay tuned.</p>";
         }
     },
 

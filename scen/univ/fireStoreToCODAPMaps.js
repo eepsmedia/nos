@@ -62,6 +62,13 @@ fireStoreToCODAPMaps = {
         }
     },
 
+    findCaseIDofResult : function(iResult) {
+        if (!iResult.dbid) {
+            return null;
+        }
+        return this.caseIDMap[iResult.dbid];
+    },
+
     /**
      * Given an object filled with Results, which of them are NOT in our maps?
      *

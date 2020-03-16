@@ -143,7 +143,7 @@ XYZ:      https://codap.xyz/plugins/nos2/scen/univ/univ.html
         <li><a href="#dataTab">Data</a></li>
         <li><a href="#makeFigureTab">Edit Figure</a></li>
         <li><a href="#figuresArchiveTab">Figures Storage</a></li>
-        <li><a href="#optionsTab">Options</a></li>
+        <li><a href="#journalTab">Journal</a></li>
     </ul>
 
     <div id="observationsTab">
@@ -168,7 +168,10 @@ XYZ:      https://codap.xyz/plugins/nos2/scen/univ/univ.html
     </div>
 
     <div id="makeFigureTab">
-        <div id="noCurrentFigureMessage"><h2>You have not chosen a Figure to work on</h2></div>
+        <div id="noCurrentFigureMessage">
+            <h2>You have not chosen a Figure to work on</h2>
+            <p>Start a figure in the <strong>Data</strong> tab.</p>
+        </div>
         <div id="makeFigureTabGuts">
             <label for="snapshotTitle">Title: </label>
             <input type="text" id="snapshotTitle" placeholder="give the figure a title"
@@ -188,11 +191,11 @@ XYZ:      https://codap.xyz/plugins/nos2/scen/univ/univ.html
     </div>
 
     <div id="figuresArchiveTab">
-        <h2>Figures you have made</h2>
         <div id="figuresList"></div>
     </div>
 
-    <div id="optionsTab">
+    <div id="journalTab">
+        <div id="journalDiv"></div>
     </div>
 </div>
 

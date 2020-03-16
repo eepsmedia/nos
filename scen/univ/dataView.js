@@ -74,12 +74,20 @@ univ.dataView = {
     },
 
     redraw : async function() {
-        let theDisplayedResults = [];   //  array of Result objects
-
-        let tDataDisplayChoice = $('input[name=dataDisplayChoice]:checked').val();
-
         const allResults = await nos2.getKnownResults();  //  array
 
+        //  set the "selected" field of all our results
+
+        const selectedCaseIDs = await univ.CODAPconnect.getListOfSelectedCaseIDs(univ.constants.kUnivDataSetName);
+
+        allResults.forEach( r => {
+            const theCaseID = fireStoreToCODAPMaps.findCaseIDofResult(r);
+            r.selected = selectedCaseIDs.includes(theCaseID);
+        });
+
+
+        const tDataDisplayChoice = $('input[name=dataDisplayChoice]:checked').val();
+        let theDisplayedResults = [];   //  array of Result objects
         if (tDataDisplayChoice === "selection") {
             allResults.forEach( r => {
                 if (r.selected) {
@@ -96,8 +104,10 @@ univ.dataView = {
 
             //  see what might have to be added to CODAP (e.g., we learned something by reading)
             const theNewResults = fireStoreToCODAPMaps.findUnmappedResults(theDisplayedResults);
-            await univ.CODAPconnect.saveResultsToCODAP(theNewResults);     //  add our known-from-before results to CODAP
 
+            if (theNewResults.length > 0) {
+                await univ.CODAPconnect.saveResultsToCODAP(theNewResults);     //  add our known-from-before results to CODAP
+            }
         }
     },
 

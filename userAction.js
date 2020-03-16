@@ -227,8 +227,9 @@ nos2.userAction = {
         $("#figurePreview").dialog("open");
     },
 
-    erasePaper: async function () {
-        nos2.currentPaper = new Paper();
+    discardPaper: async function () {
+        if (nos2.currentPaper) fireConnect.deletePaperByDBID(nos2.currentPaper.guts.dbid);
+        nos2.currentPaper = null;
         await nos2.ui.update();
     },
 
