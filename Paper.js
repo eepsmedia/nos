@@ -27,7 +27,6 @@ limitations under the License.
 */
 
 class Paper {
-
     constructor(iGuts = null) {
         if (iGuts) {
             this.guts = iGuts;

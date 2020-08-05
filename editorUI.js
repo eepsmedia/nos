@@ -31,7 +31,7 @@ nos2.ui = {
         nos2.ui.update();
     },
 
-    openPaper :  function( iPaperID) {
+    openPaper: function (iPaperID) {
         const thePaper = nos2.currentPaper = nos2.thePapers[iPaperID];    //  thePapers is a keyed object, not an array
         nos2.currentFigure = (thePaper.guts.figures.length > 0) ? nos2.theFigures[thePaper.guts.figures[0]] : null;
 
@@ -39,7 +39,7 @@ nos2.ui = {
 
     },
 
-    viewPaper : function(iPaperID, iInJournal) {
+    viewPaper: function (iPaperID, iInJournal) {
         if (iInJournal) {
 
         }
@@ -98,12 +98,12 @@ nos2.ui = {
 
     },
 
-    makeAndInstallPapersList : function() {
+    makeAndInstallPapersList: function () {
         //  first, make an array of papers (easier to sort)
 
         let thePapers = [];
 
-        Object.keys(nos2.thePapers).forEach( p => {
+        Object.keys(nos2.thePapers).forEach(p => {
             thePapers.push(nos2.thePapers[p]);
         });
 
@@ -112,28 +112,33 @@ nos2.ui = {
 
         let tPaperCount = 0;
         let tDoneCount = 0;
-        let text = "<table><tr><th>id</th><th>title</th><th>status</th><th>team</th></tr>";
-        let doneTable = "<table><tr><th>citation</th><th>title</th><th>status</th><th>team</th></tr>";
+        let text = "<table><tr><th>id</th><th></th></th><th>title</th><th>status</th><th>team</th></tr>";
+        let doneTable = "<table><tr><th>citation</th><th></th><th>title</th><th>status</th><th>team</th></tr>";
 
         if (Array.isArray(thePapers)) {
             thePapers.forEach(p => {
+                const tTitle = p.guts.title ? p.guts.title : "no title";
                 if (p.guts.status === nos2.constants.kPaperStatusSubmitted || p.guts.status === nos2.constants.kPaperStatusReSubmitted) {
                     tPaperCount++;
+
                     text += "<tr><td>" + p.guts.dbid + "</td>";
-                    text += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button>&nbsp;${p.guts.title}</td>`;
+                    text += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button></td>`
+                    text += `<td>${tTitle}</td>`;
                     text += "<td>" + p.guts.status + "</td>";
                     text += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
                     text += "</tr>";
                 } else {
                     tDoneCount++;
                     doneTable += `<tr><td>${p.guts.citation ? p.guts.citation : "-"}</td>`;
-                    doneTable += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button>&emsp;${p.guts.title}</td>`;
+                    doneTable += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button></td>`
+                    doneTable += `<td>${tTitle}</td>`;
                     doneTable += "<td>" + p.guts.status + "</td>";
                     doneTable += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
                     doneTable += "</tr>";
                 }
             });
         }
+
         text += "</table>";
 
         if (tPaperCount > 0) {
@@ -145,17 +150,17 @@ nos2.ui = {
         }
         if (tDoneCount > 0) {
             tDonePapersDiv.innerHTML = "<p>"
-                + tDoneCount + (tPaperCount === 1 ? " paper " : " papers ")
+                + tDoneCount + (tDoneCount === 1 ? " paper " : " papers ")
                 + "you're done with (for now)</p>" + doneTable;
         } else {
             tPapersDiv.innerHTML = "<p>Stay tuned.</p>";
         }
     },
 
-    makeAndInstallTeamsList : function() {
+    makeAndInstallTeamsList: function () {
         //  convert the nos2.theTeams object into an array for display
         let tTeams = [];
-        Object.keys(nos2.theTeams).forEach( tk => {
+        Object.keys(nos2.theTeams).forEach(tk => {
             tTeams.push(nos2.theTeams[tk]);
         });
 
@@ -163,7 +168,7 @@ nos2.ui = {
 
         let teamInfoGuts = "<table><tr><th>code</th><th>name</th><th>balance</th></tr>";
 
-        tTeams.forEach( t => {
+        tTeams.forEach(t => {
             teamInfoGuts += `<tr><td>${t.teamCode}</td><td>${t.teamName}</td><td>${t.balance}</td></tr>`;
         });
         teamInfoGuts += "</table>";

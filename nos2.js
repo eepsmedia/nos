@@ -70,7 +70,7 @@ let nos2 = {
     theResults: {},     //  likewise
 
     constants: {
-        version: "000b",
+        version: "2020c",
 
         kAdminPhaseNoGod: 1,
         kAdminPhaseNoWorld: 2,
