@@ -36,7 +36,6 @@ nos2.ui = {
         nos2.currentFigure = (thePaper.guts.figures.length > 0) ? nos2.theFigures[thePaper.guts.figures[0]] : null;
 
         nos2.goToTabNumber(1);   //  the second tab
-
     },
 
     viewPaper: function (iPaperID, iInJournal) {
@@ -122,7 +121,7 @@ nos2.ui = {
                     tPaperCount++;
 
                     text += "<tr><td>" + p.guts.dbid + "</td>";
-                    text += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button></td>`
+                    text += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>review</button></td>`
                     text += `<td>${tTitle}</td>`;
                     text += "<td>" + p.guts.status + "</td>";
                     text += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
@@ -153,6 +152,9 @@ nos2.ui = {
                 + tDoneCount + (tDoneCount === 1 ? " paper " : " papers ")
                 + "you're done with (for now)</p>" + doneTable;
         } else {
+            tDonePapersDiv.innerHTML = "<p>No completed papers on the shelf.</p>";
+        }
+        if (tDoneCount + tPaperCount <= 0) {
             tPapersDiv.innerHTML = "<p>Stay tuned.</p>";
         }
     },

@@ -125,11 +125,11 @@ class Paper {
             referencesHTML = "<p>no references</p>";
         }
 
-        const citationHTML = this.guts.citation ? `${this.guts.citation}` : `(${this.guts.status})`;
+        const citationHTML = this.guts.citation ? `(${this.guts.citation})` : `(${this.guts.status})`;
 
         const out = `
                     <div class="paper">
-                    <h2>${this.guts.title} (${citationHTML})</h2>
+                    <h2>${this.guts.title} ${citationHTML}</h2>
                     <b>${this.guts.authors}</b><br>
                     <i>${this.guts.teamName}</i>
                     <p>${this.guts.text}</p>
