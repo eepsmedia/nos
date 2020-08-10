@@ -30,7 +30,12 @@ const teamNameSuggestionList = {
     researchCenters:
         [
             {code: "cit", name: "Caltech"},
+            {code: "fiu", name: "Florida International University"},
+            {code: "jhu", name: "Johns Hopkins University"},
             {code: "unam", name: "Universidad Nacional Autónoma de México"},
+            {code: "txag", name: "Texas A&M University"},
+            {code: "ethz", name: "Swiss Federal Institute Zürich"},
+            {code: "toro", name: "University of Toronto"},
             {code: "gsfc", name: "Goddard Space Flight Center"},
             {code: "ucla", name: "University of California at Los Angeles"},
             {code: "stan", name: "Stanford University"},
@@ -43,7 +48,8 @@ const teamNameSuggestionList = {
             {code: "udub", name: "University of Washington"},
             {code: "rice", name: "Rice University"},
             {code: "mich", name: "University of Michigan"},
-            {code: "epfl", name: "École Polytechnique Fédérale de Lausanne"},
+            {code: "heid", name: "Universität Heidelberg"},
+            {code: "sorb", name: "Sorbonne Université"},
             {code: "nau", name: "Northern Arizona University"},
             {code: "jpl", name: "Jet Propulsion Laboratory"},
             {code: "rpi", name: "Rensselaer Polytechnic Institute"},
@@ -59,7 +65,7 @@ const teamNameSuggestionList = {
             {code: "emry", name: "Emory University"},
             {code: "cdc", name: "Centers for Disease Control"},
             {code: "wu", name: "Washington University"},
-            {code: "ohsu", name: "Oregon Health Sciences University"}         //  31 = prime :)
+            {code: "toky", name: "University of Tokyo"}         //  37 = prime :)
         ],
     animals:
         [

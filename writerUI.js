@@ -267,7 +267,8 @@ nos2.ui = {
             text += "</table>";
             tPaperDiv.innerHTML = text;
         } else {
-            tPaperDiv.innerHTML = "<p>Sorry, no papers to display</p>";
+            tPaperDiv.innerHTML = `<p>Sorry, no papers to display</p>
+                    <p>Go to the <strong>writing</strong> tab to make a new paper.</p>`;
         }
     },
 

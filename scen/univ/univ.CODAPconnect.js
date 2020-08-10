@@ -201,7 +201,7 @@ univ.CODAPconnect = {
     univDataContextSetupObject: {
         name: univ.constants.kUnivDataSetName,
         title: univ.constants.kUnivDataSetTitle,
-        description: 'four-color universe',
+        description: 'observatory',
         collections: [
             {
                 name: univ.constants.kUnivCollectionName,
@@ -233,7 +233,7 @@ univ.CODAPconnect = {
     iFrameDescriptor: {
         version: univ.constants.version,
         name: 'univ',
-        title: 'four-color universe',
+        title: 'observatory',
         dimensions: {width: 555, height: 500},
         preventDataContextReorg: true           //      doing this (and the thing in init) saves our selection functionality
     }
