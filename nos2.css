@@ -132,9 +132,12 @@ details[open] {
 }
 
 .plaqueText {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
     font-size : 12px;
+    /*
     color : red;
     background-color : black;
+    */
 }
 
 .figureInList {

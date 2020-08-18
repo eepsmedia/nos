@@ -50,7 +50,7 @@ let univ = {
     playPhase : null,
 
     constants : {
-        version : "000b",
+        version : "2020d",
 
         kPhaseNoWorld : 20,
         kPhaseNoTeam : 30,
@@ -223,12 +223,12 @@ let univ = {
 
 
     colors: {
-        "R": "tomato",
-        "B": "dodgerblue",
-        "O": "orange",
-        "G": "green",
-        "K": "black",
-        "Y": "yellow",
+        "R": { fill: "tomato", text: "#333" },
+        "B": { fill: "dodgerblue", text: "white" },
+        "O": { fill: "orange", text: "#333" },
+        "G": { fill: "green", text: "white" },
+        "K": { fill: "black", text: "white" },
+        "Y": { fill: "yellow", text: "#333" },
         "selected" : "#72bfca",     //  "#89F",
         "unselected" : "gold",
 

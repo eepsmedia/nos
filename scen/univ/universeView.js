@@ -66,7 +66,7 @@ univ.universeView = {
                 const tx = col * box + 1;
                 const ty = row * box + 1;
                 const theLetter = iArray[col][row];
-                const tColor =  theLetter ? univ.colors[theLetter] : "black";
+                const tColor =  theLetter ? univ.colors[theLetter].fill : "black";
 
                 this.thePaper.rect(tx, ty, box-2, box-2).attr({"fill" : tColor});
             }

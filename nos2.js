@@ -70,7 +70,7 @@ let nos2 = {
     theResults: {},     //  likewise
 
     constants: {
-        version: "2020c",
+        version: "2020d",
 
         kAdminPhaseNoGod: 1,
         kAdminPhaseNoWorld: 2,
@@ -198,5 +198,9 @@ let nos2 = {
             return out;
         }
     },
+
+    getGrantAmount : function() {
+        return 1000 * Number(document.getElementById("grantAmountThou").value)
+    }
 
 };

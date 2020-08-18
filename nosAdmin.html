@@ -173,7 +173,10 @@ limitations under the License.
         <input id="annualIncomeThou" type="number" value="2" min="0" max="20">
         <br>
         <label for="grantAmountThou">Grant amount (click 💵) (thousands)</label>
-        <input id="grantAmountThou" type="number" value="3" min="0" max="20">
+        <input id="grantAmountThou"
+               type="number" value="3" min="0" max="20"
+               onchange="nos2.ui.update()"
+        >
 
         <details>
             <summary>make new teams</summary>

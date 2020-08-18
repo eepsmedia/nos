@@ -99,6 +99,38 @@ class Result {
         return paper;
     }
 
+    plaqueSVG() {
+        const theLabel = univ.convertCoordinatesToLabel([this.data.col,this.data.row]);
+        const theSizeString = `${this.data.dim}x${this.data.dim}`;
+        const theColors = ['R', 'O', 'G', 'B'];
+        let theColorStrip = "";
+        let tLeft = 2;
+        const blockY = 36;  //  baseline of the second, "block" line
+        const blockWidth = 17;
+        const blockHeight = 16;
+        const blockGap = 3;
+
+        theColors.forEach( color => {
+            const tCount = this.data[color];    //  count of that color
+            const tResultColor = univ.colors[color];
+            theColorStrip += `<rect x="${tLeft}" y="${blockY - blockHeight}" `;
+            theColorStrip +=  ` width="${blockWidth}" height="${blockHeight}" `;
+            theColorStrip +=  ` fill="${tResultColor.fill}"></rect>`;
+            theColorStrip += `<text x="${tLeft+2}" y="${blockY - 3}" fill="${tResultColor.text}">${tCount}${color}</text>`;
+            tLeft += (blockWidth + blockGap);
+        });
+
+        return (
+            `<svg height="40" width="80" class="plaqueText">
+                <rect height="40" width="80" fill="lightgray"></rect>
+                
+                <text x="4" y="16">${theSizeString} at ${theLabel}</text>
+                ${theColorStrip}
+            </svg>`
+        )
+
+    }
+
     toggleSelection() {
         const theCaseID = fireStoreToCODAPMaps.caseIDMap[this.dbid];
         console.log("toggling result caseID = " + theCaseID);

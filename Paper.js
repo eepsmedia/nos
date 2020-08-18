@@ -32,26 +32,26 @@ class Paper {
             this.guts = iGuts;
         } else {
             this.guts = {
-                dbid : null,
-                visible : true,     //  visible to author? (yes, until explicitly hidden)
-                title : "",
-                authors : "",
-                text : "",
+                dbid: null,
+                visible: true,     //  visible to author? (yes, until explicitly hidden)
+                title: "",
+                authors: "",
+                text: "",
 
-                worldCode : nos2.state.worldCode,       //  not needed, but possibly interesting to überGods
-                teamCode : nos2.state.teamCode,
-                teamName : nos2.state.teamName,     //  redundant but useful
-                created : new Date(),       //  when the user first created this Paper
+                worldCode: nos2.state.worldCode,       //  not needed, but possibly interesting to überGods
+                teamCode: nos2.state.teamCode,
+                teamName: nos2.state.teamName,     //  redundant but useful
+                created: new Date(),       //  when the user first created this Paper
 
-                convo : [],     //  array of objects e.g.,  {from : "author", text : "WTF??"}
+                convo: [],     //  array of objects e.g.,  {from : "author", text : "WTF??"}
 
-                figures : [],       //  array of dbids of Figures for This Paper
+                figures: [],       //  array of dbids of Figures for This Paper
 
-                status : nos2.constants.kPaperStatusDraft,
-                pubYear : null,     //  publication epoch
-                pubTime : null,     //  the Date() when it was published; used for chron sorting
-                citation : null,      //  how we will be cited
-                references : [],    //  dbids of relevant papers
+                status: nos2.constants.kPaperStatusDraft,
+                pubYear: null,     //  publication epoch
+                pubTime: null,     //  the Date() when it was published; used for chron sorting
+                citation: null,      //  how we will be cited
+                references: [],    //  dbids of relevant papers
             }
         }
     }
@@ -64,7 +64,7 @@ class Paper {
     }
 
     setThisFigure(iFigureDBID) {
-        this.guts.figures = [ iFigureDBID ];
+        this.guts.figures = [iFigureDBID];
         console.log("Set figure (dbid) " + iFigureDBID + " for paper " + this.guts.title);
     }
 
@@ -74,10 +74,10 @@ class Paper {
      */
     addFigure(iFigure) {
 
-        if (this.guts.figures.includes( iFigure.dbid)) {
+        if (this.guts.figures.includes(iFigure.dbid)) {
             console.log("Paper " + this.guts.title + " already has figure " + iFigure.guts.text.title);
         } else {
-            this.guts.figures.push( iFigure.dbid );
+            this.guts.figures.push(iFigure.dbid);
             console.log("Added figure " + iFigure.guts.text.title + " to paper " + this.guts.title);
         }
     }
@@ -103,7 +103,27 @@ class Paper {
     asHTML() {
         let figureHTML;
         let referencesHTML;
-        const theResults = this.resultsArray();
+        const thisPapersResultsDBIDs = this.resultsArray();
+
+        //  count how many results for this paper are from other teams
+        //  (so may be learnable. We will not wait around to assess exactly what we know)
+        let foreignResultCount = 0;
+        thisPapersResultsDBIDs.forEach(rdbid => {
+            if (nos2.theResults[rdbid].teamCode !== nos2.state.teamCode) {
+                foreignResultCount++;
+            }
+        })
+
+        const learnResultsHTML = `
+        <div>
+            <p>This paper has ${foreignResultCount} 
+            result${(foreignResultCount === 1) ? "" : "s"}
+            found by other teams.
+            <button onclick="nos2.learnResults('${this.guts.figures}')">
+            learn them
+            </button>
+        </div>
+        `
 
         if (this.guts.figures.length > 0) {
             const theFigure = nos2.theFigures[this.guts.figures[0]];
@@ -116,7 +136,7 @@ class Paper {
 
         if (this.guts.references.length) {
             referencesHTML = "<h3>References</h3><ul>";
-            this.guts.references.forEach( rid => {
+            this.guts.references.forEach(rid => {
                 const paper = nos2.thePapers[rid];
                 referencesHTML += `<li>${paper.guts.citation}</li>`;
             });
@@ -135,10 +155,11 @@ class Paper {
                     <p>${this.guts.text}</p>
                     ${figureHTML}
                     ${referencesHTML}
-                    <button onclick="nos2.learnResults('${this.guts.figures}')">learn ${theResults.length} results</button>
+                    ${ (foreignResultCount > 0 && this.guts.status === nos2.constants.kPaperStatusPublished) ? 
+                        learnResultsHTML : ``}
                     </div>
                     `;
-        
+
         return out;
     }
 
@@ -159,12 +180,12 @@ class Paper {
 
         let thePromises = [];
 
-        this.guts.figures.forEach( (figDBID) => {
+        this.guts.figures.forEach((figDBID) => {
             const theFigure = nos2.theFigures[figDBID];
             if (!theFigure.guts.citation) {
                 theFigure.guts.citation = this.guts.dbid;
                 thePromises.push(fireConnect.saveFigureToDB(theFigure));
-                theFigure.guts.results.forEach( (resDBID) => {
+                theFigure.guts.results.forEach((resDBID) => {
                     const theResult = nos2.theResults[resDBID];
                     if (!theResult.citation) {
                         theResult.citation = this.guts.dbid;
@@ -181,9 +202,9 @@ class Paper {
 
         let out = [];
 
-        this.guts.figures.forEach( (figDBID) => {
+        this.guts.figures.forEach((figDBID) => {
             const theFigure = nos2.theFigures[figDBID];
-            theFigure.guts.results.forEach( (resDBID) => {
+            theFigure.guts.results.forEach((resDBID) => {
                 const theResult = nos2.theResults[resDBID];
                 if (theResult.citation) {
                     out.push(theResult.citation);
@@ -196,9 +217,11 @@ class Paper {
     }
 
     addReferences(iRefs) {
-        if (!Array.isArray(iRefs)) {iRefs = [iRefs]}
+        if (!Array.isArray(iRefs)) {
+            iRefs = [iRefs]
+        }
 
-        iRefs.forEach( r => {
+        iRefs.forEach(r => {
             if (!this.guts.references.includes(r)) {
                 this.guts.references.push(r)
             }
@@ -206,9 +229,11 @@ class Paper {
     }
 
     removeReferences(iRefs) {
-        if (!Array.isArray(iRefs)) {iRefs = [iRefs]}
+        if (!Array.isArray(iRefs)) {
+            iRefs = [iRefs]
+        }
 
-        iRefs.forEach( r => {
+        iRefs.forEach(r => {
             const ix = this.guts.references.indexOf(r);
             if (ix >= 0) {
                 this.guts.references.splice(ix, 1);
@@ -234,7 +259,7 @@ paperConverter = {
         return iPaper.guts;
     },
     fromFirestore: function (iSnap, options) {
-        const theData = iSnap.data( );
+        const theData = iSnap.data();
         return new Paper(theData);
     }
 };

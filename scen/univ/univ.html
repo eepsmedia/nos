@@ -151,12 +151,28 @@ XYZ:      https://codap.xyz/plugins/nos2/scen/univ/univ.html
         <input type="radio" name="chooseObservationSize" value=3 onchange="univ.userAction.changeSize()" checked>3x3&nbsp;|
         <input type="radio" name="chooseObservationSize" value=2 onchange="univ.userAction.changeSize()">2x2
         <br>
-        <svg id="telescope" width="300" height="300"></svg>
-        <div>
-            <span id="latestResultText"></span><br>
-            <span id="telescopeLocationText"></span>
-            <button id="observeButton" onclick="univ.userAction.observe()">collect data</button>
-        </div>
+        <table>
+            <tr>
+                <td>
+                    <svg id="telescope" width="300" height="300"></svg>
+
+                </td>
+                <td>
+                    <div>
+                        <h2>Your Telescope</h2>
+                        <p id="telescopeLocationText"></p>
+                        <p>The red box shows where you are pointing.
+                            The yellow box shows where you will point if you click.
+                        </p>
+                        <p>
+                            <span id="latestResultText"></span><br>
+                        </p>
+                        <button id="observeButton" onclick="univ.userAction.observe()">collect data</button>
+                    </div>
+
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div id="dataTab">

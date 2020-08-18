@@ -85,7 +85,10 @@ fireConnect = {
 
     adjustBalance(iTeamCode, iAmount) {
         nos2.theTeams[iTeamCode].balance += iAmount;
-        fireConnect.teamsCR.doc(iTeamCode).update({balance : nos2.theTeams[iTeamCode].balance});
+        fireConnect.teamsCR.doc(iTeamCode).update({
+            balance : nos2.theTeams[iTeamCode].balance,
+            lastChange : Date.now(),
+        });
     },
 
     async assertKnownResult(iID) {
@@ -104,7 +107,8 @@ fireConnect = {
         });
 
         await this.myTeamDR.update({
-            known: thisTeam.known
+            known: thisTeam.known,
+            lastChange : Date.now(),
         });
 
         console.log(`Team ${thisTeam.teamCode} knows ${thisTeam.known.length} results ${thisTeam.known.toString()}`);

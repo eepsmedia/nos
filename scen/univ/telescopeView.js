@@ -106,7 +106,7 @@ univ.telescopeView = {
                 } else {
                     let tr = this.thePaper.rect(tx, ty, box - 2, box - 2);
                     const theLetter = iArray[col][row];
-                    const tColor = theLetter ? univ.colors[theLetter] : "gray";
+                    const tColor = theLetter ? univ.colors[theLetter].fill : "gray";
 
                     tr.attr({"fill": tColor});
 
@@ -135,7 +135,8 @@ univ.telescopeView = {
         const tTelescopeLocationText = document.getElementById("telescopeLocationText");
         if (this.selectedPoint) {
             tTelescopeLocationText.innerHTML =
-                "Upper left at " + univ.convertCoordinatesToLabel(this.selectedPoint);
+                `Currently pointing at a ${this.experimentSize}x${this.experimentSize} array.
+                Its upper-left corner is at ${univ.convertCoordinatesToLabel(this.selectedPoint)}`;
         } else {
             tTelescopeLocationText.innerHTML = "Click in the grid to point";
         }
@@ -144,7 +145,7 @@ univ.telescopeView = {
     displayLatestResult: function () {
         const tLatestResultText = document.getElementById("latestResultText");
         if (this.latestResult) {
-            tLatestResultText.innerHTML = this.latestResult.toString();
+            tLatestResultText.innerHTML = this.latestResult.plaqueSVG();        //  toString();
         } else {
             tLatestResultText.innerHTML = "click <b>collect data</b> to get a new result";
         }

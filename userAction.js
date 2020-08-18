@@ -329,7 +329,7 @@ nos2.userAction = {
     },
 
     giveGrant: async function(iTeamCode) {
-        const theAmount = 1000 * Number(document.getElementById("grantAmountThou").value);
+        const theAmount = nos2.getGrantAmount();
         fireConnect.adjustBalance(iTeamCode, theAmount);
     },
 

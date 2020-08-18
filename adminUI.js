@@ -135,7 +135,22 @@ nos2.ui = {
         }
     },
 
+    makeDelayTextFromTicks  : function( iTicks )    {
+        let out = "";
+
+        if (iTicks < 100000) {
+            out = Math.round(iTicks / 1000) + " seconds";
+        }  else if (iTicks < 100 * 60 * 1000) {
+            out = Math.round(iTicks / 60000) + " minutes";
+        } else if (iTicks < 30 * 3600 * 1000) {
+            out = Math.round(iTicks / 3600 / 1000) + " hours";
+        }
+        return out;
+    },
+
     makeAndInstallTeamsList : function () {
+
+        //  temporary ARRAY of teams
         let tTeams = [];
         Object.keys(nos2.theTeams).forEach(tk => {
             tTeams.push(nos2.theTeams[tk])
@@ -146,12 +161,22 @@ nos2.ui = {
         //  alternate money emoji: 💰    💵
 
         if (tTeams.length > 0) {
-            let text = "<table><tr><th>code</th><th>name</th><th>balance</th></tr>";
+            let text = "<table><tr><th>code</th><th>name</th><th>balance</th><th>last seen</th></tr>";
             tTeams.forEach(t => {
+                let delayText = "";
+                if (t.lastChange) {
+                    const now = new Date();
+                    const delay = now - t.lastChange;
+                    delayText = `${this.makeDelayTextFromTicks(delay)} ago`;
+                } else {
+                    delayText = "never";
+                }
+                const grantText = `grant \$${nos2.getGrantAmount()} to ${t.teamCode}: `
                 text += "<tr><td>" + t.teamCode + "</td><td>" + t.teamName + "</td><td>" + t.balance + "</td>"
-                    + `<td><span class="moneyButton" onclick="nos2.userAction.giveGrant('${t.teamCode}')">💵</span></td>`
-                    + "</tr>";
-                // + "<td><button onclick='nos2.userAction.joinWorldByID(" + w.id + ", \"" + w.code + "\")'>join</button> </td></tr>";
+                    + `<td>${delayText}</td>`
+                    + `<td>${grantText}`
+                    + `<span class="moneyButton" onclick="nos2.userAction.giveGrant('${t.teamCode}')">💵</span>`
+                    + `</td></tr>`;
             });
             text += "</table>";
             tTeamsListDiv.innerHTML = text;
