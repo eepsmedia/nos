@@ -100,31 +100,43 @@ class Paper {
         }
     }
 
+    findUnknownResultsInThisPaper() {
+        const theResultIDs = [];
+
+        if (nos2.state.teamCode) {
+            this.guts.figures.forEach(figID => {
+                const theFigure = nos2.theFigures[figID];
+                theFigure.guts.results.forEach(resultID => {
+                    const tKnown = (nos2.theTeams[nos2.state.teamCode]).known;
+                    if (!tKnown.includes(resultID)) {
+                        theResultIDs.push(resultID);
+                    }
+                })
+            })
+        }
+        return theResultIDs;
+    }
+
+
+
     asHTML() {
         let figureHTML;
         let referencesHTML;
         const thisPapersResultsDBIDs = this.resultsArray();
 
-        //  count how many results for this paper are from other teams
-        //  (so may be learnable. We will not wait around to assess exactly what we know)
-        let foreignResultCount = 0;
-        thisPapersResultsDBIDs.forEach(rdbid => {
-            if (nos2.theResults[rdbid].teamCode !== nos2.state.teamCode) {
-                foreignResultCount++;
-            }
-        })
+        //  count how many results for this paper are unknown to this team
 
+        const unknownResults = this.findUnknownResultsInThisPaper();
         const learnResultsHTML = `
         <div>
-            <p>This paper has ${foreignResultCount} 
-            result${(foreignResultCount === 1) ? "" : "s"}
-            found by other teams.
-            <button onclick="nos2.learnResults('${this.guts.figures}')">
-            learn them
+            <p>This paper has ${unknownResults.length} 
+            result${(unknownResults.length === 1) ? "" : "s"}
+            found by other teams that you are not aware of.
+            <button onclick='fireConnect.assertKnownResult(${JSON.stringify(unknownResults)})'>
+            learn ${(unknownResults.length === 1) ? "it!" : "them!"}
             </button>
         </div>
         `
-
         if (this.guts.figures.length > 0) {
             const theFigure = nos2.theFigures[this.guts.figures[0]];
             figureHTML = `<svg width="333" viewBox="${theFigure.viewBoxString()}">${theFigure.guts.image.contents}</svg>
@@ -155,7 +167,7 @@ class Paper {
                     <p>${this.guts.text}</p>
                     ${figureHTML}
                     ${referencesHTML}
-                    ${ (foreignResultCount > 0 && this.guts.status === nos2.constants.kPaperStatusPublished) ? 
+                    ${ (unknownResults.length > 0 && this.guts.status === nos2.constants.kPaperStatusPublished) ? 
                         learnResultsHTML : ``}
                     </div>
                     `;

@@ -111,7 +111,21 @@ fireConnect = {
             lastChange : Date.now(),
         });
 
-        console.log(`Team ${thisTeam.teamCode} knows ${thisTeam.known.length} results ${thisTeam.known.toString()}`);
+        let tAlertText;
+
+        if (iID.length === 1) {
+            tAlertText = `You just learned a new result`;
+        } else {
+            tAlertText = `You just learned ${iID.length} new results`;
+        }
+
+        Swal.fire({
+            icon : 'info',
+            title : 'New data',
+            text : tAlertText,
+        });
+
+        console.log(`Team ${thisTeam.teamCode} now knows ${thisTeam.known.length} results ${thisTeam.known.toString()}`);
     },
 
     getWorldCount: async function() {
@@ -227,7 +241,11 @@ fireConnect = {
                 if (theGodData.godPassword === iPassword) {
                     return theGodData;
                 } else {
-                    alert("Password does not match");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'oops!',
+                        text: "password does not match",
+                    });
                     return null;
                 }
             } else {
@@ -475,7 +493,11 @@ fireConnect = {
 
             if (newYear !== nos2.epoch) {   //  nos2.epoch was set earlier, old year number.
                 nos2.epoch = nos2.theWorld.epoch;
-                alert(`Happy New Year! It is now ${nos2.epoch} in ${nos2.state.worldCode}`);
+                Swal.fire({
+                    icon: 'success',
+                    title: "Happy New Year!",
+                    text: `It is now ${nos2.epoch} in ${nos2.state.worldCode}!`
+            });
                 nos2.ui.update();
             }
 

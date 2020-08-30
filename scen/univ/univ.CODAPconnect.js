@@ -86,6 +86,7 @@ univ.CODAPconnect = {
             fireStoreToCODAPMaps.addResultsAndResponses(iResult, createItemsResult);    //  update ID maps (caseID to dbid)
 
             //  make the case table in case it's not present
+/*
             codapInterface.sendRequest({
                 "action": "create",
                 "resource": "component",
@@ -94,6 +95,7 @@ univ.CODAPconnect = {
                     "dataContext": univ.constants.kUnivDataSetName,
                 }
             })
+*/
         }
 
     },

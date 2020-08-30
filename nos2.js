@@ -70,7 +70,7 @@ let nos2 = {
     theResults: {},     //  likewise
 
     constants: {
-        version: "2020d",
+        version: "2020e",
 
         kAdminPhaseNoGod: 1,
         kAdminPhaseNoWorld: 2,
@@ -153,21 +153,6 @@ let nos2 = {
         //  [nos2.theTeams, nos2.thePapers, nos2.theFigures] = await Promise.all([tPromise, pPromise, fPromise]);
     },
 
-    /**
-     *
-     * @param fdbid  dbid of the first figure referenced by the paper
-     */
-    learnResults: function (fdbid) {
-
-        const theFigure = nos2.theFigures[fdbid];
-        const theResultIDs = theFigure.guts.results;
-        fireConnect.assertKnownResult(theResultIDs);
-/*
-        theResultIDs.forEach(rid => {
-            fireConnect.assertKnownResult(rid);
-        });
-*/
-    },
 
     getKnownResults: async function () {
         if (nos2.state.worldCode && nos2.state.teamCode) {

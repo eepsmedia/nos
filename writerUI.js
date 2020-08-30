@@ -119,6 +119,13 @@ nos2.ui = {
         await nos2.ui.update();
     },
 
+    fillWritingFieldsWithPaper : function(iPaper) {
+        document.getElementById('paperStatusBox').innerHTML = `(${iPaper.guts.status})`;    //  .innerHTML because it's a <td>
+        document.getElementById('paperTitleBox').value = iPaper.guts.title;    //  .value because it's an <input>
+        document.getElementById('paperAuthorsBox').value = iPaper.guts.authors;
+        document.getElementById('paperTextBox').value = iPaper.guts.text;
+        document.getElementById('paperConvoHistory').innerHTML = iPaper.guts.convo;
+    },
 
     /**
      * Called by update()
@@ -126,12 +133,14 @@ nos2.ui = {
      * @returns {Promise<void>}
      */
     async displayCurrentPaper() {
+        console.log('....displaying current paper');
         const thePaper = nos2.currentPaper;  //  was set in openPaper(), in userActions
 
         const viewDIV = document.getElementById("viewPaperDIV");
         const editDIV = document.getElementById("composePaperDIV");
 
         if (nos2.currentPaper) {
+            console.log(`......there is a current paper, text [${thePaper.guts.text}]`);
             if (thePaper.isEditable()) {
 
                 //      EDIT paper
@@ -143,11 +152,6 @@ nos2.ui = {
                 document.getElementById("submitPaperButton").style.display = "block";
                 document.getElementById("discardPaperButton").style.display = "block";
 
-                document.getElementById('paperStatusBox').innerHTML = "(" + thePaper.guts.status + ")";    //  .innerHTML because it's a <td>
-                document.getElementById('paperTitleBox').value = thePaper.guts.title;    //  .value because it's an <input>
-                document.getElementById('paperAuthorsBox').value = thePaper.guts.authors;
-                document.getElementById('paperTextBox').value = thePaper.guts.text;
-                document.getElementById('paperConvoHistory').innerHTML = thePaper.guts.convo;
 
                 //  update the figure menu and the figure itself
 
@@ -167,7 +171,7 @@ nos2.ui = {
                 //  show the references
                 this.installReferencesControls();
 
-            } else {
+            } else {        //  not editable
 
                 //  VIEW paper
 

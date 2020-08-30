@@ -53,8 +53,10 @@ nos2.userAction = {
                     //  new name, OK to make a world
                     await this.newWorld(tWorldCode, document.getElementById("worldNicknameBox").value);
                     await this.joinWorldByCode(tWorldCode, iCallback);
-                    alert(`Success! The code for your new game is "${tWorldCode}". 
-                                Players will need that code to log in.`);
+                    Swal.fire({
+                        icon : "success",
+                        text: `Success! The code for your new game is "${tWorldCode}". 
+                                Players will need that code to log in.`});
                 }
             } else {
                 //      we are joining an exisiting world
@@ -62,7 +64,10 @@ nos2.userAction = {
                     //  existing world, OK to join
                     await this.joinWorldByCode(tWorldCode, iCallback);
                 } else {
-                    alert(`World ${tWorldCode} does not exist. Find an existing world.`)
+                    Swal.fire({
+                        icon : 'error',
+                        text : `World ${tWorldCode} does not exist. Find an existing world.`
+                })
                     document.getElementById("worldCodeBox").value = "";
                     tWorldCode = null;
                 }
@@ -70,7 +75,10 @@ nos2.userAction = {
             nos2.ui.update();
             return tWorldCode;
         } else {
-            alert("you need to enter a world code somehow, like in the box.");
+            Swal.fire({
+                icon : 'error',
+                text: "you need to enter a world code somehow, like in the box.",
+            });
         }
     },
 
@@ -253,6 +261,7 @@ nos2.userAction = {
      */
     newPaper : function() {
         nos2.currentPaper = new Paper();
+        nos2.ui.fillWritingFieldsWithPaper(nos2.currentPaper);
         nos2.currentFigure = null;
         nos2.goToTabNumber(1);   //  the second tab; also causes update
     },
@@ -270,7 +279,7 @@ nos2.userAction = {
         //  set the current figure to the first (if any) in this paper.
         const currentFigureDBID = nos2.currentPaper.guts.figures.length ? nos2.currentPaper.guts.figures[0] : null;
         nos2.currentFigure = currentFigureDBID ? nos2.theFigures[currentFigureDBID] : null;
-
+        nos2.ui.fillWritingFieldsWithPaper(nos2.currentPaper);
         nos2.goToTabNumber(1);   //  the second tab; also causes update
     },
 
