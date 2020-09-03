@@ -26,6 +26,18 @@ limitations under the License.
 
 */
 
+/*
+Implementation notes
+
+nos.currentFigure   is a Figure, but it is NOT a pointer into an element in nos2.theFigures.
+                    It's purely local and temporary, and only gets sent to the DB when you save the figure.
+                    Likewise, when the DB tells us figures have changed, it does not change!
+                    The old bug (2020-09-02): It was updated only `onblur`. When the DB told us something
+                    changed, we updated nos.currentFigure (even though it did not come from the DB).
+                    Because it had not been updated since the last blur, current work was lost.
+                    Now it's updated with a textbox `oninput` handler, that is, at every keypress.
+ */
+
 let nos2 = {
 
     initialize: function(iApp) {
@@ -70,7 +82,7 @@ let nos2 = {
     theResults: {},     //  likewise
 
     constants: {
-        version: "2020e",
+        version: "2020f",
 
         kAdminPhaseNoGod: 1,
         kAdminPhaseNoWorld: 2,

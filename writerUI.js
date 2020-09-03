@@ -152,7 +152,6 @@ nos2.ui = {
                 document.getElementById("submitPaperButton").style.display = "block";
                 document.getElementById("discardPaperButton").style.display = "block";
 
-
                 //  update the figure menu and the figure itself
 
                 this.figureMenuGuts = await nos2.ui.makeFigureMenuOptions();

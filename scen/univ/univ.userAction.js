@@ -101,7 +101,7 @@ univ.userAction = {
         nos2.theFigures[(nos2.currentFigure.dbid)] = nos2.currentFigure;        //  save in the local array
         //  nos2.currentFigure = new Figure();      //   maybe they want to keep working on it?
 
-        nos2.ui.update();
+        //  nos2.ui.update();       //      not needed because we get a refresh after the DB fires
     },
 
     makeFigureCurrentByDBID: function (iDBID) {

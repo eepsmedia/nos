@@ -62,10 +62,10 @@ nos2.journal = {
             }
         });
 
-        //  now sort by publication date
+        //  now sort by publication date, most recent at the top
 
         publishedPapers.sort( (a,b) =>  {
-            return (a.guts.pubTime - b.guts.pubTime)
+            return (b.guts.pubTime.seconds - a.guts.pubTime.seconds)
         });
 
         return publishedPapers;
@@ -94,13 +94,14 @@ nos2.journal = {
     },
 
     constructJournalHTML : async function () {
-        out = `<span class="bigHeadline">${this.name}</span>`;
+        let out = `<span class="bigHeadline">${this.name}</span>`;
 
         const arrayOfPapers = nos2.journal.assemblePublishedPapers( );
 
         if (arrayOfPapers.length) {
             arrayOfPapers.forEach(p => {
-                out += `<details><summary>${p.guts.citation}</summary>`;
+                out += `<details><summary>${p.guts.title}<br>`
+                    + `<span class="paper-title-in-details">(${p.guts.citation})</span></summary>`;
                 out += p.asHTML();
                 out += "</details>";
                 //  console.log("display paper for entire journal");

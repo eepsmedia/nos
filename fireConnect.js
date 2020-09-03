@@ -349,6 +349,15 @@ fireConnect = {
      */
     savePaperToDB: async function (iPaper) {
 
+        //  let the system know thatthis team has done something
+        try {
+            fireConnect.teamsCR.doc(iPaper.guts.teamCode).update({
+                lastChange : Date.now(),
+            });
+        } catch(msg) {
+            console.log(`Error [${msg}] logging team action in savePaperToDB`);
+        }
+
         //  in case this paper has never been saved, get a (new) dbid.
         //  if it has been saved, we'll simply save over it.
 
@@ -375,6 +384,7 @@ fireConnect = {
             console.log('savePaperToDB() error: ' + msg);
             return null;
         }
+
     },
 
 

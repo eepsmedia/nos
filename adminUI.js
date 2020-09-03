@@ -112,12 +112,18 @@ nos2.ui = {
             }
         }
 
+
+
         //  update everything in tabs
 
         if (nos2.adminPhase === nos2.constants.kAdminPhasePlaying) {
             //  teams list table
             document.getElementById("teamsHed").textContent = `Teams in ${nos2.state.worldCode}`;
             this.makeAndInstallTeamsList();
+
+            //  money tab
+            document.getElementById("moneyHed").textContent = `Money in ${nos2.state.worldCode}`;
+            this.makeAndInstallMoneyList();
 
             //  paper table
             document.getElementById("papersHed").textContent = `Papers in ${nos2.state.worldCode}`;
@@ -156,12 +162,14 @@ nos2.ui = {
             tTeams.push(nos2.theTeams[tk])
         });
 
+        const tAch = this.countAchievements();
+
         const tTeamsListDiv = document.getElementById("teamsListDiv");
 
-        //  alternate money emoji: 💰    💵
-
         if (tTeams.length > 0) {
-            let text = "<table><tr><th>code</th><th>name</th><th>balance</th><th>last seen</th></tr>";
+            let text = "<table><tr><th>code</th><th>name</th>"
+                + "<th>res/known</th><th>figs</th><th>pap/pub</th>"
+                + "<th>balance</th><th>last seen</th></tr>";
             tTeams.forEach(t => {
                 let delayText = "";
                 if (t.lastChange) {
@@ -172,11 +180,12 @@ nos2.ui = {
                     delayText = "never";
                 }
                 const grantText = `grant \$${nos2.getGrantAmount()} to ${t.teamCode}: `
-                text += "<tr><td>" + t.teamCode + "</td><td>" + t.teamName + "</td><td>" + t.balance + "</td>"
+                text += "<tr><td>" + t.teamCode + "</td><td>" + t.teamName + "</td>"
+                    + `<td>${tAch[t.teamCode].results}/${tAch[t.teamCode].knownResults}</td><td>${tAch[t.teamCode].figures}</td>`
+                    + `<td>${tAch[t.teamCode].papers}/${tAch[t.teamCode].published}</td>`
+                    + `<td>${t.balance}</td>`
                     + `<td>${delayText}</td>`
-                    + `<td>${grantText}`
-                    + `<span class="moneyButton" onclick="nos2.userAction.giveGrant('${t.teamCode}')">💵</span>`
-                    + `</td></tr>`;
+                    + `</tr>`;
             });
             text += "</table>";
             tTeamsListDiv.innerHTML = text;
@@ -185,6 +194,72 @@ nos2.ui = {
         }
 
     },
+
+    makeAndInstallMoneyList : function() {
+        //  temporary ARRAY of teams
+        let tTeams = [];
+        Object.keys(nos2.theTeams).forEach(tk => {
+            tTeams.push(nos2.theTeams[tk])
+        });
+
+        const tMoneyListDiv = document.getElementById("moneyListDiv");
+
+        if (tTeams.length > 0) {
+            let text = "<table><tr><th>code</th><th>name</th><th>balance</th></tr>";
+            tTeams.forEach(t => {
+
+                const grantText = `grant \$${nos2.getGrantAmount()} to ${t.teamCode}: `
+                text += "<tr><td>" + t.teamCode + "</td><td>" + t.teamName + "</td><td>" + t.balance + "</td>"
+                    + `<td>${grantText}`
+                    + `<span class="moneyButton" onclick="nos2.userAction.giveGrant('${t.teamCode}')">💵</span>`
+                    + `</td></tr>`;
+            });
+            text += "</table>";
+            tMoneyListDiv.innerHTML = text;
+        } else {
+            tMoneyListDiv.innerHTML = "<p>Sorry, no teams to display</p>";
+        }
+
+    },
+
+    countAchievements : function() {
+        ach = {};
+
+        for (teamCode in nos2.theTeams) {
+            ach[teamCode] = {
+                papers : 0,
+                published : 0,
+                figures : 0,
+                results : 0,
+                knownResults : nos2.theTeams[teamCode].known.length,
+            };
+        }
+
+        for (p in nos2.thePapers) {
+            const aPaper = nos2.thePapers[p];
+            const team = aPaper.guts.teamCode;
+            ach[team].papers++;
+
+            if (aPaper.guts.status === nos2.constants.kPaperStatusPublished) {
+                ach[team].published++;
+            }
+        }
+
+        for (f in nos2.theFigures) {
+            const aFig = nos2.theFigures[f];
+            const team = aFig.guts.creator;
+            ach[team].figures++;
+        }
+
+        for (r in nos2.theResults) {
+            const aResult = nos2.theResults[r];
+            const team = aResult.teamCode;
+            ach[team].results++;
+        }
+
+        return ach;
+    },
+
 
     makeAndInstallPapersList : function () {
         const tPaperDiv = document.getElementById("papersListDiv");

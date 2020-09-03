@@ -149,6 +149,7 @@ limitations under the License.
 <div id="tabs">
     <ul>
         <li><a href="#teams">teams</a></li>
+        <li><a href="#money">money</a></li>
         <li><a href="#papers">papers</a></li>
         <li><a href="#journal">journal</a></li>
         <li><a href="#truth">truth</a></li>
@@ -158,14 +159,6 @@ limitations under the License.
         <h1 id="teamsHed">Teams</h1>
         <div id="teamsListDiv"></div>
 
-        <label for="annualIncomeThou">Annual income (thousands)</label>
-        <input id="annualIncomeThou" type="number" value="2" min="0" max="20">
-        <br>
-        <label for="grantAmountThou">Grant amount (click 💵) (thousands)</label>
-        <input id="grantAmountThou"
-               type="number" value="3" min="0" max="20"
-               onchange="nos2.ui.update()"
-        >
 
         <details>
             <summary>make new teams</summary>
@@ -189,6 +182,21 @@ limitations under the License.
             <br>
 <!--            <button id="refreshTeamsButton" onclick="nos2.ui.update()">refresh team list</button>-->
         </details>
+    </div>
+
+    <div id="money">
+        <h1 id="moneyHed">Money</h1>
+        <div id="moneyListDiv"></div>
+
+        <label for="annualIncomeThou">Annual income (thousands)</label>
+        <input id="annualIncomeThou" type="number" value="2" min="0" max="20">
+        <br>
+        <label for="grantAmountThou">Grant amount (click 💵) (thousands)</label>
+        <input id="grantAmountThou"
+               type="number" value="3" min="0" max="20"
+               onchange="nos2.ui.update()"
+        >
+
     </div>
 
     <div id="papers">

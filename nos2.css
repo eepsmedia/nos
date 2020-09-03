@@ -180,6 +180,10 @@ div.paper {
     padding : 1em;
 }
 
+.paper-title-in-details {
+    font-weight: normal;
+    padding-left: 3em;
+}
 /*
     for index.html etc
  */

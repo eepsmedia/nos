@@ -183,18 +183,18 @@ XYZ:      https://codap.xyz/plugins/nos2/scen/univ/univ.html
         <div id="makeFigureTabGuts">
             <label for="snapshotTitle">Title: </label>
             <input type="text" id="snapshotTitle" placeholder="give the figure a title"
-                   size="30" onblur="nos2.currentFigure.setText()">
+                   size="30" oninput="nos2.currentFigure.setText()">
             <button onclick="univ.userAction.saveFigure()">Save this figure</button>
             <br>
             <svg id="thumbnail" width="250" height="150"></svg>
             <br>
             <label for="snapshotCaption">caption</label><br>
             <textarea id="snapshotCaption" placeholder="this caption appears below the figure"
-                      rows="4" cols="40" onblur="nos2.currentFigure.setText()"></textarea>
+                      rows="4" cols="40" oninput="nos2.currentFigure.setText()"></textarea>
             <br>
             <label for="snapshotNotes">notes</label><br>
             <textarea id="snapshotNotes" placeholder="any notes?"
-                      rows="2" cols="40" onblur="nos2.currentFigure.setText()"></textarea>
+                      rows="2" cols="40" oninput="nos2.currentFigure.setText()"></textarea>
         </div>
     </div>
 
