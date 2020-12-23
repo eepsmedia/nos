@@ -40,12 +40,14 @@ nos.currentFigure   is a Figure, but it is NOT a pointer into an element in nos2
 
 let nos2 = {
 
+
     initialize: function(iApp) {
         this.app = iApp;
         console.log(`Initialize with iApp = ${iApp}`);
         fireConnect.initialize();
 
         nos2.clearVariableValues();
+
 
         nos2.ui.initialize();    //  whichever UI it is!
         nos2.ui.update();

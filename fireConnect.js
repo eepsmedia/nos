@@ -42,11 +42,28 @@ fireConnect = {
     unsubscribeFromFigures: null,
     unsubscribeFromTeams: null,
 
-    initialize: function () {
-        firebase.initializeApp(firebaseConfig);
+    initialize: async function () {
+        await firebase.initializeApp(firebaseConfig);
         this.db = firebase.firestore();
         this.worldsCR = this.db.collection("worlds");     //  worlds collection reference
         this.godsCR = this.db.collection("gods");
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        this.UI = new firebaseui.auth.AuthUI(firebase.auth());
+
+        //  have the user authenticate
+
+        this.UI.start('#firebaseui-auth-container', {
+            signInOptions: [
+                // List of OAuth providers supported.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                //  firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                //  firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                //  firebase.auth.GithubAuthProvider.PROVIDER_ID
+            ],
+            // Other config options...
+        });
+
 
 
         //  testing firestore syntax...

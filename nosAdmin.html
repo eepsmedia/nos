@@ -38,8 +38,9 @@ limitations under the License.
     <title>NoS Administration</title>
 
     <!--firebase setup-->
-    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
 
 
 
@@ -100,6 +101,8 @@ limitations under the License.
 </head>
 
 <body onload="nos2.initialize('admin')">
+
+<div id="firebaseui-auth-container"></div>
 
 <div id="adminStatusBarDiv" class="nosStatusBar"></div>
 
