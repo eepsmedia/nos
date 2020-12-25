@@ -41,19 +41,23 @@ nos.currentFigure   is a Figure, but it is NOT a pointer into an element in nos2
 let nos2 = {
 
 
-    initialize: function(iApp) {
+    initialize: async function(iApp) {
         this.app = iApp;
         console.log(`Initialize with iApp = ${iApp}`);
-        fireConnect.initialize();
+        try {
+            await fireConnect.initialize();
+            nos2.clearVariableValues();
+            nos2.ui.initialize();    //  whichever UI it is!
+            nos2.ui.update();
+        } catch(e) {
+            console.log(e.message);
+        }
 
-        nos2.clearVariableValues();
-
-
-        nos2.ui.initialize();    //  whichever UI it is!
-        nos2.ui.update();
     },
 
     app: null,
+
+    currentUser : null,
 
     kBasePhpURL: {
         local: "http://localhost:8888/plugins/nos2/nos2.php",
@@ -84,7 +88,7 @@ let nos2 = {
     theResults: {},     //  likewise
 
     constants: {
-        version: "2020f",
+        version: "2020g",
 
         kAdminPhaseNoGod: 1,
         kAdminPhaseNoWorld: 2,

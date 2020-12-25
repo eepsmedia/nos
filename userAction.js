@@ -112,7 +112,7 @@ nos2.userAction = {
         const tGameState = {truth: tTheTruthOfThisScenario};    //  temp!
 
         const theWorldData = await fireConnect.makeNewWorld({
-            "god": nos2.myGodName,
+            "god": nos2.currentUser.uid,
             "code": tWorldCode,
             "nickname" : tNickname,
             "epoch": Number(tEpoch),
@@ -342,15 +342,21 @@ nos2.userAction = {
         fireConnect.adjustBalance(iTeamCode, theAmount);
     },
 
-    godSignIn: async function () {
-        const tUsername = $('#godUsernameBox').val();
-        const tEnteredPassword = document.getElementById("godPasswordBox").value;
+    userSignOut : async function() {
 
-        const tGodData = await fireConnect.getGodData(tUsername, tEnteredPassword);
+    },
 
-        if (tGodData) {
+    userSignIn: async function (iFirebaseUser, iIsGod) {
+
+        nos2.currentUser = iFirebaseUser;    //  not yet stored in db
+
+        const tUserData = await fireConnect.setUserData(iFirebaseUser);
+
+        if (iFirebaseUser) {
+/*
             nos2.myGodID = tGodData.godName;
             nos2.myGodName = tGodData.godName;
+*/
             nos2.adminPhase = nos2.constants.kAdminPhaseNoWorld;
             nos2.ui.update();
         }
