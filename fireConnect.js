@@ -95,6 +95,11 @@ fireAuth = {
 
                 } catch (e) {
                     console.log(e.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'oops!',
+                        text: `Problems signing up: ${e.message}`,
+                    });
                 }
             } else {
                 Swal.fire({
