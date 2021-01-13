@@ -55,12 +55,6 @@ let nos2 = {
 
     app: null,
 
-    kBasePhpURL: {
-        local: "http://localhost:8888/plugins/nos2/nos2.php",
-        xyz: "https://codap.xyz/plugins/nos2/nos2.php",
-        eeps: "https://www.eeps.com/codap/nos2/nos2.php"
-    },
-
     state: {},
     epoch: 2022,        //  the time.  Not saved because it will be in the DB
     currentPaper: null,
@@ -84,7 +78,7 @@ let nos2 = {
     theResults: {},     //  likewise
 
     constants: {
-        version: "2020f",
+        version: "2021a",
 
         kAdminPhaseNoGod: 1,
         kAdminPhaseNoWorld: 2,

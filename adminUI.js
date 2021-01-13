@@ -47,7 +47,7 @@ nos2.ui = {
             `&emsp;version ${nos2.constants.version} ` +
             `&emsp;<img class="refreshButton" type="image"
                 alt="refresh" title="refresh"
-                src="../common/art/refresh_32.png"
+                src="../../common/art/refresh_32.png"
                 onClick="nos2.ui.update()">`
         ;
 

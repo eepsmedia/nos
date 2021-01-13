@@ -29,6 +29,9 @@ limitations under the License.
 fireConnect = {
 
     db: null,
+    /**
+     * Collection Reference to the "worlds" database
+     */
     worldsCR: null,
     godsCR: null,
     teamsCR: null,         //  teams SUBcollection within this world.
@@ -366,7 +369,7 @@ fireConnect = {
      */
     savePaperToDB: async function (iPaper) {
 
-        //  let the system know thatthis team has done something
+        //  let the system know that this team has done something
         try {
             fireConnect.teamsCR.doc(iPaper.guts.teamCode).update({
                 lastChange : Date.now(),
