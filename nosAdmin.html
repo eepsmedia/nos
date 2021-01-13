@@ -42,8 +42,6 @@ limitations under the License.
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
 
-
-
     <script src="fireConnect.js"></script>
     <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
 
@@ -93,7 +91,7 @@ limitations under the License.
     <script>
         $(function () {
             $("#tabs").tabs();
-            nos2.initialize();
+            nos2.initialize("admin");
         });
     </script>
 
@@ -102,23 +100,22 @@ limitations under the License.
 
 <body onload="nos2.initialize('admin')">
 
+<!--
 <div id="firebaseui-auth-container"></div>
+-->
 
 <div id="adminStatusBarDiv" class="nosStatusBar"></div>
 
-<div id="godLoginDiv" class="startup">
-    <h1>Login </h1>
-    <p>For now, we have very, very low security.
-        By typing in a username, you create an "account."
-        The password is used only to help avoid duplicate names.</p>
+<div id="loginDiv" class="startup">
+    <h1>World administration!<br/>Sign up and log in </h1>
 
-    <label for="godUsernameBox">Username: </label>
-    <input type="text" id="godUsernameBox">
-    <br>
-    <label for="godPasswordBox">Password: </label>
-    <input type="text" id="godPasswordBox">
-    <br>
-    <button id="signInButton" onclick="nos2.userAction.godSignIn()">sign in</button>
+    <input type="text" id="loginDisplayNameText" class="logintext" placeholder="display name"><br/>
+    <input type="text" id="loginEmailText" class="logintext" placeholder="email"><br/>
+    <input type="text" id="loginPasswordText" class="logintext" placeholder="password"><br/>
+
+    <button id="signUpButton" >sign up</button>
+    <button id="loginButton" >log in</button>
+    <button id="logoutButton" hidden>log out</button>
 </div>
 
 <div id="godChooseWorldDiv" class="startup">

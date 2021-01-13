@@ -41,19 +41,23 @@ nos.currentFigure   is a Figure, but it is NOT a pointer into an element in nos2
 let nos2 = {
 
 
-    initialize: function(iApp) {
+    initialize: async function(iApp) {
         this.app = iApp;
         console.log(`Initialize with iApp = ${iApp}`);
-        fireConnect.initialize();
+        try {
+            await fireConnect.initialize();
+            nos2.clearVariableValues();
+            nos2.ui.initialize();    //  whichever UI it is!
+            nos2.ui.update();
+        } catch(e) {
+            console.log(e.message);
+        }
 
-        nos2.clearVariableValues();
-
-
-        nos2.ui.initialize();    //  whichever UI it is!
-        nos2.ui.update();
     },
 
     app: null,
+
+    currentUser : null,
 
     state: {},
     epoch: 2022,        //  the time.  Not saved because it will be in the DB

@@ -26,6 +26,102 @@ limitations under the License.
 
 */
 
+fireAuth = {
+
+    auth : null,    //  shortcut set in initialize()
+
+    UI : null,      //  the firebaseUI object, for authentication
+
+    initialize: async function() {
+        firebase.auth().signOut();
+        nos2.currentUser = null;
+
+        const txtDisplayName = document.getElementById("loginDisplayNameText");
+        const txtEmail = document.getElementById("loginEmailText");
+        const txtPassword = document.getElementById("loginPasswordText");
+
+        const btnLogin = document.getElementById("loginButton");
+        const btnSignup = document.getElementById("signUpButton");
+        const btnLogout = document.getElementById("logoutButton");
+
+        btnLogin.addEventListener("click", async e => {
+            const auth = firebase.auth();
+
+            try {
+                const loginResult = await auth.signInWithEmailAndPassword(
+                    txtEmail.value,
+                    txtPassword.value
+                );
+                const oldDisplayName = loginResult.user.displayName;
+
+                if (txtDisplayName.value) {
+                    const updateResult = await auth.currentUser.updateProfile({
+                        displayName: txtDisplayName.value,
+                    });
+                }
+                console.log(auth.currentUser);
+                nos2.userAction.userSignIn(auth.currentUser);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Welcome back!',
+                    text: `Good to see you, ${auth.currentUser.displayName}`,
+                });
+
+
+            } catch(e) {
+                console.log(e.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'oops!',
+                    text: e.message,
+                });
+            }
+        });
+
+        btnSignup.addEventListener("click", async e => {
+            const auth = firebase.auth();
+            if (txtDisplayName.value) {
+
+                try {
+                    const loginResult = await auth.createUserWithEmailAndPassword(
+                        txtEmail.value,
+                        txtPassword.value
+                    );
+                    updateResult = await auth.currentUser.updateProfile({
+                        displayName: txtDisplayName.value,
+                    });
+                    console.log(auth.currentUser);
+                    nos2.userAction.userSignIn(auth.currentUser);
+
+                } catch (e) {
+                    console.log(e.message);
+                }
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'oops!',
+                    text: "You really should have a display name in order to be a world administrator.",
+                });
+            }
+        });
+
+        btnLogout.addEventListener('click', e => {
+            firebase.auth().signOut();
+            nos2.currentUser = null;
+            nos2.ui.update();
+        })
+
+        //  realtime listener for authentication changes, e.g., log in, log out
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                console.log(user);
+            } else {
+                console.log("not logged ih");
+            }
+        });
+    }
+}
+
 fireConnect = {
 
     db: null,
@@ -45,29 +141,14 @@ fireConnect = {
     unsubscribeFromFigures: null,
     unsubscribeFromTeams: null,
 
+
     initialize: async function () {
         await firebase.initializeApp(firebaseConfig);
         this.db = firebase.firestore();
         this.worldsCR = this.db.collection("worlds");     //  worlds collection reference
         this.godsCR = this.db.collection("gods");
 
-        // Initialize the FirebaseUI Widget using Firebase.
-        this.UI = new firebaseui.auth.AuthUI(firebase.auth());
-
-        //  have the user authenticate
-
-        this.UI.start('#firebaseui-auth-container', {
-            signInOptions: [
-                // List of OAuth providers supported.
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                //  firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-                //  firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-                //  firebase.auth.GithubAuthProvider.PROVIDER_ID
-            ],
-            // Other config options...
-        });
-
-
+        await fireAuth.initialize();
 
         //  testing firestore syntax...
 
@@ -106,8 +187,8 @@ fireConnect = {
     adjustBalance(iTeamCode, iAmount) {
         nos2.theTeams[iTeamCode].balance += iAmount;
         fireConnect.teamsCR.doc(iTeamCode).update({
-            balance : nos2.theTeams[iTeamCode].balance,
-            lastChange : Date.now(),
+            balance: nos2.theTeams[iTeamCode].balance,
+            lastChange: Date.now(),
         });
     },
 
@@ -128,7 +209,7 @@ fireConnect = {
 
         await this.myTeamDR.update({
             known: thisTeam.known,
-            lastChange : Date.now(),
+            lastChange: Date.now(),
         });
 
         let tAlertText;
@@ -140,22 +221,22 @@ fireConnect = {
         }
 
         Swal.fire({
-            icon : 'info',
-            title : 'New data',
-            text : tAlertText,
+            icon: 'info',
+            title: 'New data',
+            text: tAlertText,
         });
 
         console.log(`Team ${thisTeam.teamCode} now knows ${thisTeam.known.length} results ${thisTeam.known.toString()}`);
     },
 
-    getWorldCount: async function() {
+    getWorldCount: async function () {
         const gamesQuerySnapshot = await this.worldsCR.get();
         return gamesQuerySnapshot.size;
     },
 
     makeNewWorld: async function (iNewWorldObject) {
         try {
-           await this.worldsCR.doc(iNewWorldObject.code).set(iNewWorldObject);
+            await this.worldsCR.doc(iNewWorldObject.code).set(iNewWorldObject);
             return iNewWorldObject;
         } catch (msg) {
             console.log('makeNewWorld() error: ' + msg);
@@ -188,7 +269,7 @@ fireConnect = {
         return null;
     },
 
-    subscribeToListeners : function() {
+    subscribeToListeners: function () {
         console.log(`   *** in fireConnect.subscribeToListeners, app is ${nos2.app}`);
         fireConnect.unsubscribeFromWorld = this.setWorldListener();
         fireConnect.unsubscribeFromPapers = this.setPapersListener();
@@ -252,59 +333,49 @@ fireConnect = {
         return theTeams;
     },
 
-    getGodData: async function (iUsername, iPassword) {
+    /**
+     * Store the userID (of the admin only?) in firestore
+     * This is used to identify which worlds that person can administer
+     * @param iFirebaseUser
+     * @returns {Promise<void>}
+     */
+    setUserData: async function (iFirebaseUser) {
         try {
-            const docSnap = await this.godsCR.doc(iUsername).get();
+            const docSnap = await this.godsCR.doc(iFirebaseUser.uid).get();
             if (docSnap.exists) {
-                const theGodData = docSnap.data();
+                const theUserData = docSnap.data();
 
-                if (theGodData.godPassword === iPassword) {
-                    return theGodData;
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'oops!',
-                        text: "password does not match",
-                    });
-                    return null;
-                }
             } else {
-                console.log("Making a new God: " + iUsername);
-                const newGodDR = await this.godsCR.doc(iUsername);
-                newGodDR.set({
-                    godName: iUsername,
-                    godPassword: iPassword,
+                console.log("Making a new God: " + iFirebaseUser.displayName);
+                const newUserDR = await this.godsCR.doc(iFirebaseUser.uid);
+                newUserDR.set({
+                    name: iFirebaseUser.displayName,
+                    email: iFirebaseUser.email,
                 });
+/*
                 const newGodSnap = await newGodRef.get();
                 return newGodSnap.data();
-            }
-        } catch (e) {
-            console.log('getGodData() error: ' + e);
-        }
-    },
-
-    newGod: async function (iUsername) {
-        try {
-            const out = await fireConnect.sendCommand({"c": "newGod", "u": iUsername});
-            return out;
-        } catch (e) {
-            console.log('newGod() error: ' + e);
-        }
-    },
-
-/*
-    getFigurePreview: async function (iFigureID) {
-        let out = null;
-        if (iFigureID) {
-            try {
-                const theFigure = nos2.theFigures[iFigureID]
-            } catch (e) {
-                console.log('getFigurePreview() error: ' + e);
-            }
-        }
-        return out;
-    },
 */
+            }
+        } catch (e) {
+            console.log('setUserData() error: ' + e);
+        }
+    },
+
+
+    /*
+        getFigurePreview: async function (iFigureID) {
+            let out = null;
+            if (iFigureID) {
+                try {
+                    const theFigure = nos2.theFigures[iFigureID]
+                } catch (e) {
+                    console.log('getFigurePreview() error: ' + e);
+                }
+            }
+            return out;
+        },
+    */
 
     saveMessage: async function (iPaper, iWho, iText) {
         const paperDR = this.papersCR.doc(iPaper.guts.dbid);
@@ -372,9 +443,9 @@ fireConnect = {
         //  let the system know that this team has done something
         try {
             fireConnect.teamsCR.doc(iPaper.guts.teamCode).update({
-                lastChange : Date.now(),
+                lastChange: Date.now(),
             });
-        } catch(msg) {
+        } catch (msg) {
             console.log(`Error [${msg}] logging team action in savePaperToDB`);
         }
 
@@ -516,8 +587,8 @@ fireConnect = {
     },
 
 
-    setWorldListener : function() {
-        return this.thisWorldDR.onSnapshot( Ws => {
+    setWorldListener: function () {
+        return this.thisWorldDR.onSnapshot(Ws => {
             nos2.theWorld = Ws.data();      //  update nos2.theWorld on change (e.g., epoch)
             const newYear = nos2.theWorld.epoch;
 
@@ -527,7 +598,7 @@ fireConnect = {
                     icon: 'success',
                     title: "Happy New Year!",
                     text: `It is now ${nos2.epoch} in ${nos2.state.worldCode}!`
-            });
+                });
                 nos2.ui.update();
             }
 

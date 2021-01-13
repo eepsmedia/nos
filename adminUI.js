@@ -40,10 +40,24 @@ nos2.ui = {
 
         //  status bar
 
+        const userStatusText = nos2.currentUser ?
+            `| ${nos2.currentUser.displayName} ` :
+            `| no user yet `;
+
+        const worldStatusText = nos2.state.worldCode ?
+            `| ${nos2.state.worldCode} ` :
+            "";
+
+        const epochStatusText = nos2.epoch ? `|  ${nos2.epoch} ` : "";
+
+        const statusButtons = nos2.state.worldCode ?
+            `&emsp;&emsp;&emsp;&emsp;<button onclick='nos2.userAction.newYear()'>new year</button>
+                &emsp;&emsp;<button onclick='nos2.logout()'>log out</button>` :
+            ""
+
         document.getElementById("adminStatusBarDiv").innerHTML =
-            `admin | ${nos2.myGodName} | ${nos2.state.worldCode} | ${nos2.epoch}` +
-            "&nbsp;&nbsp;&nbsp;&nbsp; <button onclick='nos2.userAction.newYear()'>new year</button>" +
-            "&emsp;&emsp;<button onclick='nos2.logout()'>log out</button>" +
+            `admin ${userStatusText} ${worldStatusText} ${epochStatusText} ` +
+            statusButtons +
             `&emsp;version ${nos2.constants.version} ` +
             `&emsp;<img class="refreshButton" type="image"
                 alt="refresh" title="refresh"
@@ -53,11 +67,11 @@ nos2.ui = {
 
         // main visibility
 
-        const tGodLoginDiv = document.getElementById("godLoginDiv");
+        const tLoginDiv = document.getElementById("loginDiv");
         const tGodChooseWorldDiv = document.getElementById("godChooseWorldDiv");
         const tTabsDiv = document.getElementById("tabs");
 
-        tGodLoginDiv.style.display = (nos2.adminPhase === nos2.constants.kAdminPhaseNoGod ? "block" : "none");
+        tLoginDiv.style.display = (nos2.currentUser ? "none" : "block");
         tGodChooseWorldDiv.style.display = (nos2.adminPhase === nos2.constants.kAdminPhaseNoWorld ? "block" : "none");
         tTabsDiv.style.display = (nos2.adminPhase === nos2.constants.kAdminPhasePlaying ? "block" : "none");
 
@@ -84,12 +98,13 @@ nos2.ui = {
 
 
         //  world list table
+
         if (nos2.adminPhase === nos2.constants.kAdminPhaseNoWorld) {
             const worldsSnap = await fireConnect.worldsCR.get();
             let tWorlds = [];
             worldsSnap.forEach(ws => {
                 const aWorld = ws.data();
-                if (aWorld.god === nos2.myGodID) {
+                if (aWorld.god === nos2.currentUser.uid) {
                     tWorlds.push(aWorld)
                 }
             });
