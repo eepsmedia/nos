@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="codapxyz/nos" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="codapxyz/common">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/../common" web="/public_html/common" />
+            <mapping local="$PROJECT_DIR$" web="/public_html/nos" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="codapxyz/nos">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/../common" web="/public_html/common" />
+            <mapping local="$PROJECT_DIR$" web="/public_html/nos" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

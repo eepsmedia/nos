@@ -89,9 +89,11 @@ class Paper {
     /**
      * Used to find out how much knowledge this Paper carries
      * For now, looks only at the results in the first figure
+     *
+     * Does not go to the DB. Just gets the results from stored data in `nos2.theFigures`.
      */
     resultsArray() {
-        console.log("Paper.resultsArray()");
+        //  console.log("Paper.resultsArray()");
         if (this.guts.figures.length > 0) {
             const theFirstFigure = nos2.theFigures[this.guts.figures[0]];
             return theFirstFigure.guts.results;

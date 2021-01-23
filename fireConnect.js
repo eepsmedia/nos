@@ -59,8 +59,8 @@ fireAuth = {
                         displayName: txtDisplayName.value,
                     });
                 }
-                console.log(auth.currentUser);
-                nos2.userAction.userSignIn(auth.currentUser);
+                console.log(`login button! Logging in [${auth.currentUser.displayName}]`);
+                nos2.userAction.userSignIn(auth.currentUser);   //  OUR sign-in, not firebase's.
                 Swal.fire({
                     icon: 'info',
                     title: 'Welcome back!',
@@ -119,7 +119,7 @@ fireAuth = {
         //  realtime listener for authentication changes, e.g., log in, log out
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                console.log(user);
+                console.log(`The authorization change listener detected a change in [${user.displayName}]`);
             } else {
                 console.log("not logged ih");
             }
@@ -153,7 +153,9 @@ fireConnect = {
         this.worldsCR = this.db.collection("worlds");     //  worlds collection reference
         this.godsCR = this.db.collection("gods");
 
-        await fireAuth.initialize();
+        if (nos2.app === "admin") {         //  todo: set up authorization for other roles
+            await fireAuth.initialize();
+        }
 
         //  testing firestore syntax...
 
@@ -241,10 +243,16 @@ fireConnect = {
 
     makeNewWorld: async function (iNewWorldObject) {
         try {
+            //  const auth = firebase.auth();       //  for debugging
             await this.worldsCR.doc(iNewWorldObject.code).set(iNewWorldObject);
             return iNewWorldObject;
         } catch (msg) {
             console.log('makeNewWorld() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem making the new world: ${msg}`,
+            });
         }
 
     },
@@ -289,6 +297,12 @@ fireConnect = {
             await this.teamsCR.doc(iTeam.teamCode).set(iTeam);
         } catch (msg) {
             console.log('addTeam() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem adding team [${iTeam.teamName}]: ${msg}`,
+            });
+
         }
     },
 
@@ -307,6 +321,12 @@ fireConnect = {
             return null;
         } catch (msg) {
             console.log('getWorldData() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem getting data about [${iWorldCode}]: ${msg}`,
+            });
+
         }
     },
 
@@ -333,6 +353,12 @@ fireConnect = {
 
             } catch (msg) {
                 console.log('getAllTeams() error: ' + msg);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'oops!',
+                    text: `Problem getting data on all the teams in [${iWorldCode}]: ${msg}`,
+                });
+
             }
         }
         return theTeams;
@@ -362,8 +388,15 @@ fireConnect = {
                 return newGodSnap.data();
 */
             }
-        } catch (e) {
-            console.log('setUserData() error: ' + e);
+        } catch (msg) {
+            console.log('setUserData() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem setting data for user [${iFirebaseUser.displayName}]: ${msg}.
+                But for some reason things seem to work OK, so just proceed!`,
+            });
+
         }
     },
 
@@ -396,6 +429,11 @@ fireConnect = {
             await paperDR.update({convo: iPaper.guts.convo});
         } catch (msg) {
             console.log('saveMessage() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem saving a message about a paper: ${msg}`,
+            });
             return null;
         }
     },
@@ -434,6 +472,14 @@ fireConnect = {
             return (iResult);       //  the entire Result
         } catch (msg) {
             console.log('saveResultToDB() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops - maybe',
+                text: `Problem saving an experimental result: ${msg}. 
+                    If you are acting as a journal reviewer/editor, this is probably OK. 
+                     We're working on it!`,
+            });
+
             return null;
         }
 
@@ -451,6 +497,11 @@ fireConnect = {
                 lastChange: Date.now(),
             });
         } catch (msg) {
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem logging a team action: ${msg}`,
+            });
             console.log(`Error [${msg}] logging team action in savePaperToDB`);
         }
 
@@ -478,6 +529,11 @@ fireConnect = {
             return (tDBID);
         } catch (msg) {
             console.log('savePaperToDB() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem saving a paper on the database: ${msg}`,
+            });
             return null;
         }
 
@@ -511,6 +567,12 @@ fireConnect = {
             return (tDoc.id);
         } catch (msg) {
             console.log('saveFigureToDB() error: ' + msg);
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Problem saving a figure to the database: ${msg}`,
+            });
+
             return null;
         }
     },
@@ -541,6 +603,12 @@ fireConnect = {
 
             } catch (msg) {
                 console.log("*** firestore error in getAllResults(): " + msg);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'oops!',
+                    text: `Problem getting all results: ${msg}`,
+                });
+
                 return null;
             }
 
@@ -562,6 +630,12 @@ fireConnect = {
                 out[aFigure.guts.dbid] = aFigure;
             } catch (msg) {
                 console.log("*** Error inside loop in getAllFigures(): " + msg);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'oops!',
+                    text: `Problem retrieving all figures: ${msg}`,
+                });
+
                 return null;
             }
         });
@@ -581,6 +655,12 @@ fireConnect = {
 
             } catch (msg) {
                 console.log("*** firestore error in getAllPapers(): " + msg);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'oops!',
+                    text: `Problem retrieving all papers: ${msg}`,
+                });
+
                 return null;
             }
 

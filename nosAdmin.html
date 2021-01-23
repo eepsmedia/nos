@@ -38,26 +38,35 @@ limitations under the License.
     <title>NoS Administration</title>
 
     <!--firebase setup-->
+
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
 
+    <!--firebaseui -- needed for Google authentication -->
+    <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+
+    <!-- get the creds for this app -->
+    <script src="cred/nosAdminCred.js"></script>
+
     <script src="fireConnect.js"></script>
-    <script src="../../common/sweetalert2/dist/sweetalert2.all.min.js"></script>
+
+    <script src="../common/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Rokkitt:300,700' rel='stylesheet'>
 
-    <link rel="stylesheet" href="../../common/jquery/jquery-ui.min.css">
+    <link rel="stylesheet" href="../common/jquery/jquery-ui.min.css">
 
     <link rel='stylesheet' type='text/css' href='nos2.css'/>
 
     <!--    favicon         -->
-    <link rel="shortcut icon" href="../../common/art/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../common/art/favicon.ico" type="image/x-icon">
 
-    <script src="../../common/src/TEEUtils.js"></script>
-    <script src="../../common/jquery/jquery.min.js"></script>
-    <script src="../../common/jquery/jquery-ui.min.js"></script>
+    <script src="../common/src/TEEUtils.js"></script>
+    <script src="../common/jquery/jquery.min.js"></script>
+    <script src="../common/jquery/jquery-ui.min.js"></script>
 
     <script src="nos2.js"></script>
 
@@ -80,13 +89,9 @@ limitations under the License.
     <script src="scen/univ/universeView.js"></script>
 
     <!-- Snap -->
-    <script src="../../common/src/snap.svg-min.js"></script>
+    <script src="../common/src/snap.svg-min.js"></script>
 
-    <script src="cred/firebase_config.js"></script>
 
-    <!--firebaseui -- needed for authentication -->
-    <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
 
     <script>
         $(function () {
@@ -109,22 +114,32 @@ limitations under the License.
 <div id="loginDiv" class="startup">
     <h1>World administration!<br/>Sign up and log in </h1>
 
-    <input type="text" id="loginDisplayNameText" class="logintext" placeholder="display name"><br/>
+    <div class="loginItems">
     <input type="text" id="loginEmailText" class="logintext" placeholder="email"><br/>
-    <input type="text" id="loginPasswordText" class="logintext" placeholder="password"><br/>
+    <input type="password" id="loginPasswordText" class="logintext" placeholder="password"><br/>
+    </div>
 
-    <button id="signUpButton" >sign up</button>
+    <div class="loginItems">
+
+    <input type="text" id="loginDisplayNameText" class="logintext" placeholder="display name"><br/>
+    </div>
+
+    &emsp;<button id="signUpButton" >sign up</button>&emsp;
     <button id="loginButton" >log in</button>
     <button id="logoutButton" hidden>log out</button>
 </div>
 
 <div id="godChooseWorldDiv" class="startup">
     <h1>Specify World</h1>
+    <input type="radio" name="new-or-old-world" value="new" onchange="nos2.ui.update()">make a new world<br>
+    <input type="radio" name="new-or-old-world" value="old" onchange="nos2.ui.update()" checked>use an existing world<br>
+    <div id="godChooseExistingWorldDiv">
     <h2>Choose Existing World</h2>
+        <div id="godChooseWorldTable"></div>
 
-    <div id="godChooseWorldTable"></div>
+    </div>
 
-    <div id="godSetUpWorldDiv">
+    <div id="godMakeNewWorldDiv">
         <h2>Set Up New World</h2>
 
         <label for="worldScenarioMenu">scenario: </label>

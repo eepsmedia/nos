@@ -164,6 +164,7 @@ details[open] {
 
 .refreshSpan, .refreshButton{
     cursor : pointer;
+    height: 20px;
     /*
     width : 18px;
     height : 16px;
@@ -176,6 +177,17 @@ details[open] {
     display: flex;
     align-items: center;
 }
+
+/*
+        login
+ */
+
+.loginItems {
+    margin : 1em;
+    padding: 1em;
+    background-color: cadetblue;
+}
+
 /*
     displaying papers in the journal
  */

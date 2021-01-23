@@ -61,7 +61,7 @@ nos2.ui = {
             `&emsp;version ${nos2.constants.version} ` +
             `&emsp;<img class="refreshButton" type="image"
                 alt="refresh" title="refresh"
-                src="../../common/art/refresh_32.png"
+                src="../../common/art/refresh-empty.png"
                 onClick="nos2.ui.update()">`
         ;
 
@@ -69,10 +69,23 @@ nos2.ui = {
 
         const tLoginDiv = document.getElementById("loginDiv");
         const tGodChooseWorldDiv = document.getElementById("godChooseWorldDiv");
+        const tGodMakeNewWorldDiv = document.getElementById("godMakeNewWorldDiv");
+        const tGodChooseExistingWorldDiv = document.getElementById("godChooseExistingWorldDiv");
         const tTabsDiv = document.getElementById("tabs");
 
         tLoginDiv.style.display = (nos2.currentUser ? "none" : "block");
-        tGodChooseWorldDiv.style.display = (nos2.adminPhase === nos2.constants.kAdminPhaseNoWorld ? "block" : "none");
+
+        //  we are in "choose world"
+        if (nos2.adminPhase === nos2.constants.kAdminPhaseNoWorld) {
+            tGodChooseWorldDiv.style.display = "block";
+            const newWorld = document.querySelector("input[name='new-or-old-world']:checked").value === "new";
+
+            tGodMakeNewWorldDiv.style.display = newWorld ? "block" : "none";
+            tGodChooseExistingWorldDiv.style.display = newWorld ? "none" : "block";
+
+        } else {
+            tGodChooseWorldDiv.style.display = "none";
+        }
         tTabsDiv.style.display = (nos2.adminPhase === nos2.constants.kAdminPhasePlaying ? "block" : "none");
 
 

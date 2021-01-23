@@ -353,10 +353,6 @@ nos2.userAction = {
         const tUserData = await fireConnect.setUserData(iFirebaseUser);
 
         if (iFirebaseUser) {
-/*
-            nos2.myGodID = tGodData.godName;
-            nos2.myGodName = tGodData.godName;
-*/
             nos2.adminPhase = nos2.constants.kAdminPhaseNoWorld;
             nos2.ui.update();
         }

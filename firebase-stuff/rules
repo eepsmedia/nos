@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // This rule allows anyone on the internet to view, edit, and delete
+    // all data in your Firestore database. It is useful for getting
+    // started, but it is configured to expire after 30 days because it
+    // leaves your app open to attackers. At that time, all client
+    // requests to your Firestore database will be denied.
+    //
+    // Make sure to write security rules for your app before that time, or else
+    // your app will lose access to your Firestore database
+    //	match /{document=**} {
+    //	  allow read, write: if request.time < timestamp.date(2021, 1, 31);
+    //	}
+
+    match /worlds/{world} {
+    	allow read : if true;
+      allow create : if (request.auth != null && request.auth.uid == request.data.god);
+      allow update : if (request.auth != null && request.auth.uid == request.data.god);
+    }
+
+    //	teams are tricky; only God can make a team, but players can add to the "known" field
+    //	also: we check that teamCode in the request is not null, but isn't that redundant with the key?
+    //			should we in fact be basing the rule on the id? Is that request.resource.id?
+    match /worlds/{world}/teams/{team} {
+    	allow read : if true;
+      allow create : if (request.auth != null && request.resource.data.teamCode != null);
+      allow delete : if (request.auth != null && request.resource.data.teamCode != null);
+      allow update: if (request.resource.data.lastChange != null);
+    }
+
+    match /worlds/{worldId}/figures/{figureId} {
+    	allow read: if true;
+      allow write: if request.resource.data.epoch > 0;
+    }
+
+    match /worlds/{worldId}/papers/{paperId} {
+    	allow read: if true;
+      allow write: if request.resource.data.worldCode == worldId;
+    }
+
+//	could check that teamCode is an actual team, eventually that the
+//	user is in the team
+    match /worlds/{worldId}/results/{resultId} {
+    	allow read: if true;
+      allow write: if request.resource.data.epoch > 0;   //  could check teamCode for existence
+    }
+  }
+}

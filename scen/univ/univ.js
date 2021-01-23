@@ -50,7 +50,7 @@ let univ = {
     playPhase : null,
 
     constants : {
-        version : "2020f",
+        version : "2021a",
 
         kPhaseNoWorld : 20,
         kPhaseNoTeam : 30,
@@ -61,10 +61,13 @@ let univ = {
         kUnivCollectionName : "univ",
 
         kInitialBalance : 10000,
+        kPossibleColors : ["Y","B","R","G"],
 
 },
 
     initialize : async function(iApp) {
+        console.log(`Initialize with iApp = ${iApp}`);
+
         nos2.app = iApp;
         await univ.CODAPconnect.initialize(null);
 
@@ -143,7 +146,7 @@ let univ = {
         //  the specific data appropriate to this scenario.
         //  epoch, team, and paper are added when we make a Result object.
         let data = {
-            O : 0, R : 0, G : 0, B : 0,
+            Y : 0, R : 0, G : 0, B : 0,
             col : ULCc, row : ULCr,
             dim : univ.telescopeView.experimentSize
         };

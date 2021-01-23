@@ -69,7 +69,7 @@ class Result {
     }
 
     toShortString() {
-        return `${this.data.R}R.${this.data.O}O.${this.data.G}G.${this.data.B}B`;
+        return `${this.data.R}R.${this.data.Y}Y.${this.data.G}G.${this.data.B}B`;
     }
 
     plaque() {
@@ -102,7 +102,7 @@ class Result {
     plaqueSVG() {
         const theLabel = univ.convertCoordinatesToLabel([this.data.col,this.data.row]);
         const theSizeString = `${this.data.dim}x${this.data.dim}`;
-        const theColors = ['R', 'O', 'G', 'B'];
+        const theColors = univ.constants.kPossibleColors;
         let theColorStrip = "";
         let tLeft = 2;
         const blockY = 36;  //  baseline of the second, "block" line

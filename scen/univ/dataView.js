@@ -113,7 +113,7 @@ univ.dataView = {
 
     displaySomeResults : function( iResults ) {
 
-        iResults.sort( (a,b) => { return a.data.row - b.data.row}); //  sort results by row
+        iResults.sort( (a,b) => { return a.data.row + a.data.dim/2 - b.data.row - b.data.dim/2}); //  sort results by row
         this.results = iResults;
         this.thePaper.clear();
         this.drawArray(this.makeUniformArray("K"));

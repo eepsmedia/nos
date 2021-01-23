@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f6a3c421-5c24-432c-88dc-26d656b02467" name="codapxyz/nos" url="http://184.154.47.42">
+        <fileTransfer rootFolder="/public_html/nos/" host="184.154.47.42" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="40a4aaf3-10bc-4fee-9c64-c1f488898e2c" name="codapxyz/common" url="http://184.154.47.42">
+        <fileTransfer rootFolder="/public_html/common/" host="184.154.47.42" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

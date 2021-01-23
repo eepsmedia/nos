@@ -50,7 +50,7 @@ univ.model = {
         for (let row=0; row < iSize; row++) {
             out[row] = [];
             for (let col=0; col < iSize; col++) {
-                let aColor = TEEUtils.pickRandomItemFrom(["O","B","R","G"]);
+                let aColor = TEEUtils.pickRandomItemFrom(univ.constants.kPossibleColors);
                 out[row][col] = aColor;
             }
         }
