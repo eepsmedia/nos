@@ -93,12 +93,39 @@ univ.userAction = {
     },
 
     saveFigure: async function () {
-        nos2.currentFigure.guts.text.caption = document.getElementById("snapshotCaption").value;
-        nos2.currentFigure.guts.text.title = document.getElementById("snapshotTitle").value;
-        nos2.currentFigure.guts.text.notes = document.getElementById("snapshotNotes").value;
+        const newTitle = document.getElementById("snapshotTitle").value;
 
-        fireConnect.saveFigureToDB(nos2.currentFigure);         //  not in univ, but rather in nos2
-        nos2.theFigures[(nos2.currentFigure.dbid)] = nos2.currentFigure;        //  save in the local array
+        if (newTitle.length > 0) {
+            nos2.currentFigure.guts.text.title = newTitle;
+            nos2.currentFigure.guts.text.caption = document.getElementById("snapshotCaption").value;
+            nos2.currentFigure.guts.text.notes = document.getElementById("snapshotNotes").value;
+
+            try {
+                const tNewFigureId = fireConnect.saveFigureToDB(nos2.currentFigure);         //  not in univ, but rather in nos2
+
+                if (tNewFigureId) {
+                    nos2.theFigures[(nos2.currentFigure.dbid)] = nos2.currentFigure;        //  save in the local array
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Well done!',
+                        text: `You saved figure [${nos2.currentFigure.guts.text.title}]`,
+                    });
+                }
+            } catch(msg) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'oops!',
+                    text: `There was a problem saving your figure" ${msg}`,
+                });
+            }
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'oops!',
+                text: `Your figure needs a title!`,
+            });
+
+        }
         //  nos2.currentFigure = new Figure();      //   maybe they want to keep working on it?
 
         //  nos2.ui.update();       //      not needed because we get a refresh after the DB fires

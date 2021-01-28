@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <!--
 ==========================================================================
@@ -136,10 +136,11 @@ limitations under the License.
 
     <div id="list">
         <h1>Editor Task List</h1>
-<!--        <button id="paperListRefreshButton" onclick="nos2.ui.update()">refresh list</button>-->
-        <div id="paperTaskTable"></div>
-        <h1>No Action Required</h1>
-        <div id="doneTaskTable"></div>
+        <!--        <button id="paperListRefreshButton" onclick="nos2.ui.update()">refresh list</button>-->
+        <div id="paperTaskTable" class="paperListTable"></div>
+        <h1>Papers with no action required</h1>
+        <div id="revisingTaskTable" class="paperListTable"></div>
+        <div id="draftPaperTable" class="paperListTable"></div>
     </div>
 
     <!--    REVIEWING tab  -->
@@ -150,31 +151,49 @@ limitations under the License.
         <div id="yesPaperToReview">
             <div id="reviewPaperGuts"></div>        <!--  displays the paper -->
 
-            <button id="acceptPaperButton"
-                    onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusPublished)">accept</button>
-            <button id="rejectPaperButton"
-                    onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusRejected)">reject</button>
-            <button id="revisePaperButton"
-                    onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusRevise)">revise</button>
-<!--
-            <button id="previewFigureButton" onclick="nos2.userAction.makeFigurePreview( )">figure preview</button>
--->
+            <div id="reviewDisposition">
+                <div class="reviewDispoitionSection">
+                    Decision:<br>
+                    <input type="radio" name="reviewChoice" id="reviewChoiceAccept" value="accept">
+                    <label for="reviewChoiceAccept">accept</label><br>
+                    <input type="radio" name="reviewChoice" id="reviewChoiceRevise" value="revise">
+                    <label for="reviewChoiceRevise">revise</label><br>
+                    <input type="radio" name="reviewChoice" id="reviewChoiceReject" value="reject" checked>
+                    <label for="reviewChoiceReject">reject</label><br>
+                </div>
+                <div class="reviewDispoitionSection">
+                    message for the authors:<br>
+                    <textarea id="message-text"></textarea>
+                </div>
+                <div class="reviewDispoitionSection">
+                    <button onclick="nos2.userAction.judgePaper()">submit review</button>
+                </div>
+            </div>
+            <!--
+                        <button id="acceptPaperButton"
+                                onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusPublished)">accept</button>
+                        <button id="rejectPaperButton"
+                                onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusRejected)">reject</button>
+                        <button id="revisePaperButton"
+                                onclick="nos2.userAction.judgePaper(nos2.constants.kPaperStatusRevise)">revise</button>
+            -->
+            <!--
+                        <button id="previewFigureButton" onclick="nos2.userAction.makeFigurePreview( )">figure preview</button>
+            -->
 
             <!--        conversation section    -->
-            <details>
-                <summary>Messages with the Authors</summary>
-                <div>
-                    <div id="paperConvoHistory"></div>
-                    <hr>
-                    <label for="messageTextBox">message:</label>
-                    <button id="sendMessageButton" onclick="nos2.userAction.sendMessageFrom('editor')">
-                        send to authors
-                    </button>
-                    <br>
-                    <textarea id="messageTextBox" placeholder="Message to the authors" rows="5", cols="44"></textarea>
-                </div>
+            <h2>Messages with the Authors</h2>
+            <div id="paperConvoHistory"></div>
+            <!--
+                                <hr>
+                                <label for="messageTextBox">message:</label>
+                                <button id="sendMessageButton" onclick="nos2.userAction.sendMessageFrom('editor')">
+                                    send to authors
+                                </button>
+                                <br>
+                                <textarea id="messageTextBox" placeholder="Message to the authors" rows="5", cols="44"></textarea>
+            -->
 
-            </details>
         </div>
 
         <div id="noPaperToReview">
@@ -185,7 +204,7 @@ limitations under the License.
 
     <div id="teams">
         <h1>Team Info</h1>
-<!--        <button id="editorTeamInfoRefreshButton" onclick="nos2.ui.update()">refresh teams</button>-->
+        <!--        <button id="editorTeamInfoRefreshButton" onclick="nos2.ui.update()">refresh teams</button>-->
         <div id="editorTeamInfoDiv"></div>
     </div>
 

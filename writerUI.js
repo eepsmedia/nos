@@ -148,9 +148,9 @@ nos2.ui = {
                 viewDIV.style.display = "none";
 
                 document.getElementById("newPaperButton").style.display = "none";
-                document.getElementById("savePaperButton").style.display = "block";
-                document.getElementById("submitPaperButton").style.display = "block";
-                document.getElementById("discardPaperButton").style.display = "block";
+                document.getElementById("savePaperButton").style.display = "inline";
+                document.getElementById("submitPaperButton").style.display = "inline";
+                document.getElementById("discardPaperButton").style.display = "inline";
 
                 //  update the figure menu and the figure itself
 
@@ -188,7 +188,7 @@ nos2.ui = {
             document.getElementById("savePaperButton").style.display = "none";
             document.getElementById("submitPaperButton").style.display = "none";
             document.getElementById("discardPaperButton").style.display = "none";
-            document.getElementById("newPaperButton").style.display = "block";
+            document.getElementById("newPaperButton").style.display = "inline";
             document.getElementById('paperStatusBox').innerHTML = "no paper selected";    //  .innerHTML because it's a <td>
         }
     },
@@ -240,8 +240,10 @@ nos2.ui = {
             let text = "<table><tr><th>title</th><th>authors</th><th>status</th><th>action</th></tr>";
             tPapers.forEach(p => {
                 const theDBID = p.guts.dbid;
+                const theTitle = p.guts.title ? p.guts.title : "(no title)";
+                const theAuthors = p.guts.authors ? p.guts.authors : "(no authors)";
 
-                text += `<tr><td>${p.guts.title}</td><td>${p.guts.authors}</td><td>${p.guts.status}</td>`;
+                text += `<tr><td>${theTitle}</td><td>${theAuthors}</td><td>${p.guts.status}</td>`;
                 switch (p.guts.status) {
                     case nos2.constants.kPaperStatusDraft:
                         text += `<td><button onclick="nos2.userAction.openPaper('${theDBID}')">edit</button></td>`;

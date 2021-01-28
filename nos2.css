@@ -34,8 +34,13 @@ body, html, td {
     color : #444;
 }
 
+.ui-widget {
+    font-family: 'IBM Plex Sans Condensed', sans-serif; font-size: 14px;
+}
+
 td {
-    padding-left: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 div.startup {
@@ -114,6 +119,10 @@ p, li {
 .paperTitle {
     font-size: 18px;
     font-weight: bold;
+}
+
+.paperAuthors, .paperTeam {
+    padding-left: 1em;
 }
 
 /*
@@ -201,6 +210,26 @@ div.paper {
     font-weight: normal;
     padding-left: 3em;
 }
+
+/*
+    for the editor
+ */
+
+#reviewDisposition {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: 'IBM Plex Sans Condensed', "Helvetica Neue", Verdana, sans-serif;
+}
+
+.reviewDispoitionSection {
+    padding: 1em;
+}
+
+.paperListTable {
+    padding-left: 1em;
+}
+
 /*
     for index.html etc
  */

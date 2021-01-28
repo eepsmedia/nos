@@ -82,7 +82,7 @@ let nos2 = {
     theResults: {},     //  likewise
 
     constants: {
-        version: "2021a",
+        version: "2021b",
 
         kAdminPhaseNoGod: 1,
         kAdminPhaseNoWorld: 2,
@@ -182,18 +182,26 @@ let nos2 = {
         }
     },
 
-
     constructConvoHTML: function (iPaper) {
+
+        let out = "";
+
         if (iPaper) {
             const C = iPaper.guts.convo;
 
-            out = "<table>";
-            C.forEach(mess => {
-                out += `<tr><td>${mess.sender}:</td><td>${mess.message}</td></tr>`;
-            });
-            out += "</table>";
-            return out;
+            if (C.length) {
+                out = "<table>";
+                C.forEach(mess => {
+                    out += `<tr><td>${mess.sender}:</td><td>${mess.message}</td></tr>`;
+                });
+                out += "</table>";
+                return out;
+            } else {
+                out = "No messages have been exchanged about this paper.";
+            }
         }
+
+        return out;
     },
 
     getGrantAmount : function() {

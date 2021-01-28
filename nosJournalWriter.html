@@ -164,7 +164,6 @@ limitations under the License.
                 <button id="previewFigureButton" onclick="nos2.userAction.makeFigurePreview( )">preview Figure</button>
         -->
 
-
         <br>
 
         <table>
@@ -198,7 +197,14 @@ limitations under the License.
                 </tr>
                 <tr>
                     <td><label for="figureMenu">figure:</label></td>
-                    <td><select id="figureMenu" onchange="nos2.userAction.chooseOneFigure(this)"></select></td>
+                    <td>
+                        <select id="figureMenu" onchange="nos2.userAction.chooseOneFigure(this)"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>(To make figures, go to the <string>data</string>
+                        tab of the "scientist" app.)</td>
                 </tr>
             </table>
             <br>
@@ -233,12 +239,12 @@ limitations under the License.
             <div>
                 <div id="paperConvoHistory"></div>
                 <hr>
-                <label for="messageTextBox">message:</label>
+                <label for="message-text">message:</label>
                 <button id="sendMessageButton" onclick="nos2.userAction.sendMessageFrom('author')">
                     send to editor
                 </button>
                 <br>
-                <textarea id="messageTextBox" placeholder="Message to the editor" rows="5" , cols="44"></textarea>
+                <textarea id="message-text" placeholder="Message to the editor" rows="5" , cols="44"></textarea>
             </div>
         </details>
 

@@ -172,9 +172,10 @@ XYZ:      https://codap.xyz/plugins/nos2/scen/univ/univ.html
     <div id="dataTab">
         <svg id="dataView" width="500" height="300"></svg>
         <br>
-        <input type="radio" name="dataDisplayChoice" value="selection" onclick="nos2.ui.update()"> selection
-        <input type="radio" name="dataDisplayChoice" value="all" onclick="nos2.ui.update()" checked> all
-        <button onclick="univ.userAction.makeFigure()">make a figure</button>
+        What data can you see?
+        <input type="radio" name="dataDisplayChoice" value="all" onclick="nos2.ui.update()" checked> all data
+        <input type="radio" name="dataDisplayChoice" value="selection" onclick="nos2.ui.update()"> just the selection
+        &emsp;<button onclick="univ.userAction.makeFigure()">make a figure</button>
     </div>
 
     <div id="makeFigureTab">

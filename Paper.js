@@ -48,6 +48,7 @@ class Paper {
                 figures: [],       //  array of dbids of Figures for This Paper
 
                 status: nos2.constants.kPaperStatusDraft,
+                submitTime : null,
                 pubYear: null,     //  publication epoch
                 pubTime: null,     //  the Date() when it was published; used for chron sorting
                 citation: null,      //  how we will be cited
@@ -161,12 +162,16 @@ class Paper {
 
         const citationHTML = this.guts.citation ? `(${this.guts.citation})` : `(${this.guts.status})`;
 
+        const theTitle = this.guts.title ? this.guts.title : "NO TITLE";
+        const theAuthors = this.guts.authors ? this.guts.authors : "NO AUTHORS";
+        const theText = this.guts.text ? this.guts.text : "NO TEXT";
         const out = `
                     <div class="paper">
-                    <h2>${this.guts.title} ${citationHTML}</h2>
-                    <b>${this.guts.authors}</b><br>
-                    <i>${this.guts.teamName}</i>
-                    <p>${this.guts.text}</p>
+                    <div class="paperTitle">${theTitle} ${citationHTML}</div>
+                    <div class="paperAuthors">${theAuthors}</div>
+                    <div class="paperTeam">${this.guts.teamName}</div>
+                    <br>
+                    <div class="paperText">${theText}</div>
                     ${figureHTML}
                     ${referencesHTML}
                     ${ (unknownResults.length > 0 && this.guts.status === nos2.constants.kPaperStatusPublished) ? 
@@ -181,6 +186,23 @@ class Paper {
         return this.guts.authors + " " + nos2.epoch;
     }
 
+    async submit() {
+        const tNewStatus =
+            (this.guts.status === nos2.constants.kPaperStatusRevise) ?
+                nos2.constants.kPaperStatusReSubmitted :
+                nos2.constants.kPaperStatusSubmitted;
+        this.guts.status = tNewStatus;
+
+        this.guts.authors = document.getElementById("paperAuthorsBox").value;
+        this.guts.title = document.getElementById("paperTitleBox").value;
+        this.guts.text = document.getElementById("paperTextBox").value;
+
+        this.submitTime = new Date();
+
+        const tPaperDBID = await fireConnect.savePaperToDB(nos2.currentPaper);
+
+    }
+
     async publish() {
         this.guts.pubTime = new Date();
         this.guts.pubYear = nos2.epoch;
@@ -190,7 +212,6 @@ class Paper {
         this.addReferences(this.collectAutomaticReferences());  //  make sure all auto-adds are present
 
         //  set the "paper" or "citation" of all its results
-        //  todo: possibly promise all or bundle the following
 
         let thePromises = [];
 
@@ -262,6 +283,18 @@ class Paper {
             this.addReferences(theReference);
         } else {
             this.removeReferences(theReference);
+        }
+    }
+
+    static paperSorter(a, b) {
+        if (a.pubTime && b.pubTime) {
+            return (a.guts.pubTime.seconds - b.guts.pubTime.seconds);
+        } else if (a.submitTime && b.submitTime) {
+            return (a.guts.submitTime.seconds - b.guts.submitTime.seconds);
+        } else if (a.created && b.created) {
+            return (a.guts.created.seconds - b.guts.created.seconds);
+        } else {
+            return 0;
         }
     }
 

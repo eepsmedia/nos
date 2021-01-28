@@ -472,6 +472,9 @@ fireConnect = {
             return (iResult);       //  the entire Result
         } catch (msg) {
             console.log('saveResultToDB() error: ' + msg);
+
+            //  todo: fix error here "TypeError: Cannot read property 'known' of undefined. "
+/*
             Swal.fire({
                 icon: 'error',
                 title: 'oops - maybe',
@@ -479,6 +482,7 @@ fireConnect = {
                     If you are acting as a journal reviewer/editor, this is probably OK. 
                      We're working on it!`,
             });
+*/
 
             return null;
         }

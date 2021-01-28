@@ -84,20 +84,21 @@ univ.CODAPconnect = {
             const createItemsResult = await codapInterface.sendRequest(createItemsMessage);
 
             fireStoreToCODAPMaps.addResultsAndResponses(iResult, createItemsResult);    //  update ID maps (caseID to dbid)
-
-            //  make the case table in case it's not present
-/*
-            codapInterface.sendRequest({
-                "action": "create",
-                "resource": "component",
-                "values": {
-                    "type": "caseTable",
-                    "dataContext": univ.constants.kUnivDataSetName,
-                }
-            })
-*/
         }
+    },
 
+    /**
+     * Make the case table visible if it's not already
+     */
+    showCaseTable : function() {
+        codapInterface.sendRequest({
+            "action": "create",
+            "resource": "component",
+            "values": {
+                "type": "caseTable",
+                "dataContext": univ.constants.kUnivDataSetName,
+            }
+        })
     },
 
     selectTheseCases : async function( iDataContextName, iCaseIDList )  {
@@ -216,7 +217,7 @@ univ.CODAPconnect = {
                 attrs: [ // note how this is an array of objects.
                     {name: "dbid", type: 'categorical', description: "database ID", hidden : true},
                     {name: "R", type: 'numeric', precision : 0, description: "# red"},
-                    {name: "O", type: 'numeric', precision : 0, description: "# orange"},
+                    {name: "Y", type: 'numeric', precision : 0, description: "# yellow"},
                     {name: "G", type: 'numeric', precision : 0, description: "# blue"},
                     {name: "B", type: 'numeric', precision : 0, description: "# green"},
                     {name: "where", type: 'categorical', description: "label of the upper left corner square"},

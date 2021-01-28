@@ -45,7 +45,7 @@ limitations under the License.
 
     <!--firebaseui -- needed for Google authentication -->
     <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css"/>
 
     <!-- get the creds for this app -->
     <script src="cred/nosAdminCred.js"></script>
@@ -92,7 +92,6 @@ limitations under the License.
     <script src="../common/src/snap.svg-min.js"></script>
 
 
-
     <script>
         $(function () {
             $("#tabs").tabs();
@@ -103,7 +102,10 @@ limitations under the License.
 
 </head>
 
+<body>
+<!--
 <body onload="nos2.initialize('admin')">
+-->
 
 <!--
 <div id="firebaseui-auth-container"></div>
@@ -115,26 +117,27 @@ limitations under the License.
     <h1>World administration!<br/>Sign up and log in </h1>
 
     <div class="loginItems">
-    <input type="text" id="loginEmailText" class="logintext" placeholder="email"><br/>
-    <input type="password" id="loginPasswordText" class="logintext" placeholder="password"><br/>
+        <input type="text" id="loginEmailText" class="logintext" placeholder="email"><br/>
+        <input type="password" id="loginPasswordText" class="logintext" placeholder="password"><br/>
     </div>
 
     <div class="loginItems">
 
-    <input type="text" id="loginDisplayNameText" class="logintext" placeholder="display name"><br/>
+        <input type="text" id="loginDisplayNameText" class="logintext" placeholder="display name"><br/>
     </div>
 
-    &emsp;<button id="signUpButton" >sign up</button>&emsp;
-    <button id="loginButton" >log in</button>
-    <button id="logoutButton" hidden>log out</button>
+    &emsp;<button id="signUpButton">sign up</button>&emsp;
+    &emsp;<button id="loginButton">log in</button>
+    &emsp;<button id="logoutButton" hidden>log out</button>
 </div>
 
 <div id="godChooseWorldDiv" class="startup">
     <h1>Specify World</h1>
     <input type="radio" name="new-or-old-world" value="new" onchange="nos2.ui.update()">make a new world<br>
-    <input type="radio" name="new-or-old-world" value="old" onchange="nos2.ui.update()" checked>use an existing world<br>
+    <input type="radio" name="new-or-old-world" value="old" onchange="nos2.ui.update()" checked>use an existing
+    world<br>
     <div id="godChooseExistingWorldDiv">
-    <h2>Choose Existing World</h2>
+        <h2>Choose Existing World</h2>
         <div id="godChooseWorldTable"></div>
 
     </div>
@@ -200,7 +203,7 @@ limitations under the License.
                 <button id="newTeamButton" onclick="nos2.userAction.newTeam()">make new team</button>
             </fieldset>
             <br>
-<!--            <button id="refreshTeamsButton" onclick="nos2.ui.update()">refresh team list</button>-->
+            <!--            <button id="refreshTeamsButton" onclick="nos2.ui.update()">refresh team list</button>-->
         </details>
     </div>
 

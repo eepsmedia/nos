@@ -207,18 +207,6 @@ nos2.userAction = {
     },
 
 
-    sendMessageFrom: async function (iSender) {
-        const theTextBox = document.getElementById("messageTextBox");
-        const theNewMessage = theTextBox.value;
-        if (theNewMessage) {
-            fireConnect.saveMessage(nos2.currentPaper, iSender, theNewMessage);
-            theTextBox.value = "";
-        } else {
-            //  alert("Enter text in the box to send a message to the authors");
-        }
-        nos2.ui.update();
-    },
-
     makeFigurePreview: async function () {
         const tFigureID = nos2.currentFigure.guts.dbid;
 
@@ -302,17 +290,8 @@ nos2.userAction = {
 
     submitPaper: async function () {
         //  what will the new status be?
-        const tNewStatus =
-            (nos2.currentPaper.guts.status === nos2.constants.kPaperStatusRevise) ?
-                nos2.constants.kPaperStatusReSubmitted :
-                nos2.constants.kPaperStatusSubmitted;
-        nos2.currentPaper.guts.status = tNewStatus;
+        nos2.currentPaper.submit();
 
-        nos2.currentPaper.guts.authors = $('#paperAuthorsBox').val();
-        nos2.currentPaper.guts.title = $('#paperTitleBox').val();
-        nos2.currentPaper.guts.text = $('#paperTextBox').val();
-
-        const tPaperDBID = await fireConnect.savePaperToDB(nos2.currentPaper);
         await nos2.userAction.sendMessageFrom("author");  //  also blanks the text box
 
         nos2.currentFigure = null;
@@ -322,20 +301,57 @@ nos2.userAction = {
     },
 
 
-    judgePaper: async function (iJudgment) {
-        switch (iJudgment) {
+    judgePaper: async function ( ) {
+        const tRawJudgment = document.querySelector("input[name='reviewChoice']:checked").value;
+        const judgmentTranslator = {
+            "accept" : nos2.constants.kPaperStatusPublished,
+            "revise" : nos2.constants.kPaperStatusRevise,
+            "reject" : nos2.constants.kPaperStatusRejected,
+        }
+        const tJudgment = judgmentTranslator[tRawJudgment];
+
+        let tAuthorMessage = "";
+
+        switch (tJudgment) {
             case nos2.constants.kPaperStatusPublished:
                 nos2.currentPaper.publish();        //  sets many consequences
-        }
-        nos2.currentPaper.guts.status = iJudgment;
+                tAuthorMessage = `${nos2.journal.name} is pleased to publish your paper, 
+                    "${nos2.currentPaper.guts.title}."`;
+                break;
+            case nos2.constants.kPaperStatusRevise:
+                tAuthorMessage = `We at ${nos2.journal.name} are very interested in your paper, 
+                    "${nos2.currentPaper.guts.title}," but ask for revisions.`;
+                break;
+            case nos2.constants.kPaperStatusRejected:
+                tAuthorMessage = `We are sorry, but your paper, 
+                    "${nos2.currentPaper.guts.title}," does not meet our needs at this time.`;
+                break;
 
+        }
+        nos2.currentPaper.guts.status = tJudgment;
+
+        //  update the paper (with its new status) in the DB
         await fireConnect.savePaperToDB(nos2.currentPaper);
+
         await nos2.userAction.sendMessageFrom("reviewer");  //  also blanks the text box
 
         nos2.currentFigure = null;
         nos2.currentPaper = null;
         nos2.goToTabNumber(0);   //  return to the list, refresh
     },
+
+    sendMessageFrom: async function (iSender) {
+        const theTextBox = document.getElementById("message-text");
+        const theNewMessage = theTextBox.value;
+        if (theNewMessage) {
+            fireConnect.saveMessage(nos2.currentPaper, iSender, theNewMessage);
+            theTextBox.value = "";
+        } else {
+            //  alert("Enter text in the box to send a message to the authors");
+        }
+        nos2.ui.update();
+    },
+
 
     giveGrant: async function(iTeamCode) {
         const theAmount = nos2.getGrantAmount();

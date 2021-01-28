@@ -87,10 +87,8 @@ nos2.ui = {
                 document.getElementById("paperConvoHistory").innerHTML = nos2.constructConvoHTML(nos2.currentPaper);
             }
 
-
             //      -------     team info tab       -----------
             this.makeAndInstallTeamsList();
-
 
             //  update the full Journal
             document.getElementById("journalDiv").innerHTML = await nos2.journal.constructJournalHTML();
@@ -98,22 +96,32 @@ nos2.ui = {
 
     },
 
+
+    /**
+     * Construct the list of papers that the editor has to deal with
+     */
     makeAndInstallPapersList: function () {
         //  first, make an array of papers (easier to sort)
 
         let thePapers = [];
 
         Object.keys(nos2.thePapers).forEach(p => {
-            thePapers.push(nos2.thePapers[p]);
+            const thePaper = nos2.thePapers[p]
+                thePapers.push(thePaper);
         });
 
+        thePapers.sort(Paper.paperSorter);
+
         const tPapersDiv = document.getElementById("paperTaskTable");
-        const tDonePapersDiv = document.getElementById("doneTaskTable");
+        const tRevisingPapersDiv = document.getElementById("revisingTaskTable");
+        const tDraftPapersDiv = document.getElementById("draftPaperTable");
 
         let tPaperCount = 0;
-        let tDoneCount = 0;
-        let text = "<table><tr><th>id</th><th></th></th><th>title</th><th>status</th><th>team</th></tr>";
-        let doneTable = "<table><tr><th>citation</th><th></th><th>title</th><th>status</th><th>team</th></tr>";
+        let tRevisingCount = 0;
+        let tDraftCount = 0;
+        let text = "<table><tr></th><th>title</th><th>status</th><th>team</th><th></th></tr>";
+        let draftTable = "<table><tr><th>title</th><th>status</th><th>team</th><th></th></tr>";
+        let revisingTable = "<table><tr><th>title</th><th>status</th><th>team</th><th></th></tr>";
 
         if (Array.isArray(thePapers)) {
             thePapers.forEach(p => {
@@ -121,20 +129,28 @@ nos2.ui = {
                 if (p.guts.status === nos2.constants.kPaperStatusSubmitted || p.guts.status === nos2.constants.kPaperStatusReSubmitted) {
                     tPaperCount++;
 
-                    text += "<tr><td>" + p.guts.dbid + "</td>";
-                    text += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>review</button></td>`
+                    text += "<tr>";
                     text += `<td>${tTitle}</td>`;
                     text += "<td>" + p.guts.status + "</td>";
                     text += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
+                    text += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>review</button></td>`
                     text += "</tr>";
-                } else {
-                    tDoneCount++;
-                    doneTable += `<tr><td>${p.guts.citation ? p.guts.citation : "-"}</td>`;
-                    doneTable += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button></td>`
-                    doneTable += `<td>${tTitle}</td>`;
-                    doneTable += "<td>" + p.guts.status + "</td>";
-                    doneTable += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
-                    doneTable += "</tr>";
+                } else if (p.guts.status === nos2.constants.kPaperStatusRevise) {
+                    tRevisingCount ++;
+                    //  revisingTable += `<tr><td>${p.guts.citation ? p.guts.citation : "-"}</td>`;
+                    revisingTable += `<td>${tTitle}</td>`;
+                    revisingTable += "<td>" + p.guts.status + "</td>";
+                    revisingTable += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
+                    revisingTable += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button></td>`
+                    revisingTable += "</tr>";
+                } else if (p.guts.status === nos2.constants.kPaperStatusDraft) {
+                    tDraftCount++;
+                    //  draftTable += `<tr><td>${p.guts.citation ? p.guts.citation : "-"}</td>`;
+                    draftTable += `<td>${tTitle}</td>`;
+                    draftTable += "<td>" + p.guts.status + "</td>";
+                    draftTable += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
+                    draftTable += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button></td>`
+                    draftTable += "</tr>";
                 }
             });
         }
@@ -148,15 +164,25 @@ nos2.ui = {
         } else {
             tPapersDiv.innerHTML = "<p>Hooray! All caught up!</p>";
         }
-        if (tDoneCount > 0) {
-            tDonePapersDiv.innerHTML = "<p>"
-                + tDoneCount + (tDoneCount === 1 ? " paper " : " papers ")
-                + "you're done with (for now)</p>" + doneTable;
+
+        if (tRevisingCount > 0) {
+            tRevisingPapersDiv.innerHTML = "<p>Scientists are revising "
+                + tRevisingCount + (tRevisingCount === 1 ? " paper." : " papers.")
+                + "</p>" + revisingTable;
         } else {
-            tDonePapersDiv.innerHTML = "<p>No completed papers on the shelf.</p>";
+            tRevisingPapersDiv.innerHTML = "<p>No papers are currently in revision.</p>";
         }
-        if (tDoneCount + tPaperCount <= 0) {
-            tPapersDiv.innerHTML = "<p>Stay tuned.</p>";
+
+        if (tDraftCount > 0) {
+            tDraftPapersDiv.innerHTML = "<p>Scientists are drafting "
+                + tDraftCount + (tDraftCount === 1 ? " paper. " : " papers. ")
+                + "</p>" + draftTable;
+        } else {
+            tDraftPapersDiv.innerHTML = "<p>No completed papers on the shelf.</p>";
+        }
+
+        if (tDraftCount + tRevisingCount + tPaperCount <= 0) {
+            tPapersDiv.innerHTML = "<p>No papers ever. Stay tuned.</p>";
         }
     },
 
