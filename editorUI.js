@@ -36,7 +36,7 @@ nos2.ui = {
         const thePaper = nos2.currentPaper = nos2.thePapers[iPaperID];    //  thePapers is a keyed object, not an array
         nos2.currentFigure = (thePaper.guts.figures.length > 0) ? nos2.theFigures[thePaper.guts.figures[0]] : null;
 
-        nos2.goToTabNumber(1);   //  the second tab
+        nos2.goToTabNumber(1);   //  the second tab. Note: this does an update().
     },
 
     viewPaper: function (iPaperID, iInJournal) {
@@ -67,11 +67,17 @@ nos2.ui = {
         const tReviewPaperDiv = document.getElementById("yesPaperToReview");
         const tNoReviewPaperDiv = document.getElementById("noPaperToReview");
 
+        const tReviewDispositionSection = document.getElementById("reviewDisposition");
+
+
+        //  more visibility...
+
         tJoinWorldDiv.style.display = (nos2.editorPhase === nos2.constants.kEditorPhaseNoWorld ? "block" : "none");
         tTabsDiv.style.display = (nos2.editorPhase === nos2.constants.kEditorPhasePlaying ? "block" : "none");
 
         tReviewPaperDiv.style.display = (nos2.currentPaper ? "block" : "none");
-        tNoReviewPaperDiv.style.display = (nos2.currentPaper ? "none" : "block");
+        tNoReviewPaperDiv.style.display = (nos2.currentPaper ? "none" : "block");   //  if there is no current paper, say so.
+
 
 
         if (nos2.editorPhase === nos2.constants.kEditorPhasePlaying) {
@@ -80,6 +86,14 @@ nos2.ui = {
             this.makeAndInstallPapersList();
 
             //      ------      REVIEWING tab       -----------
+
+            //  set visibility of the review decision controls.
+            //  i.e., you can't accept a draft paper, only one that has been submitted!
+
+            const pCanReview = nos2.currentPaper && (
+                nos2.currentPaper.guts.status === nos2.constants.kPaperStatusReSubmitted ||
+                nos2.currentPaper.guts.status === nos2.constants.kPaperStatusSubmitted);
+            tReviewDispositionSection.style.display = pCanReview ? "flex" : "none";
 
             if (nos2.currentPaper) {
                 console.log("display paper for reviewer");

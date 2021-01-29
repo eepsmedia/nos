@@ -694,6 +694,19 @@ fireConnect = {
         })
     },
 
+    /**
+     * Sets the listener for papers
+     *
+     * NOTE: this does not change `nos2.currentPaper`.
+     * Consequently, if you are editing a paper and a colleague is also editing it, and they save as a draft,
+     * the DB will get their text and you will not hear anything about it.
+     * If you then submit, your draft gets submitted.
+     * If they then save again as a draft, it is no longer submitted.
+     *
+     * todo: make this more rational! Perhaps locking editing for papers being edited elsewhere.
+     *
+     * @returns {*}
+     */
     setPapersListener: function () {
         return this.papersCR.onSnapshot((iPapers) => {
             nos2.thePapers = {};    //  fresh start!
