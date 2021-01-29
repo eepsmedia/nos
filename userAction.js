@@ -165,8 +165,6 @@ nos2.userAction = {
         tNameBox.value = tTeam.name;
     },
 
-
-
     joinTeamByTeamCode: async function (iTeamCode, iTeamName) {
         nos2.state.teamCode = iTeamCode;
         nos2.state.teamName = iTeamName;
@@ -235,11 +233,7 @@ nos2.userAction = {
             nos2.currentPaper = new Paper();
         }
 
-        nos2.currentPaper.guts.authors = $('#paperAuthorsBox').val();
-        nos2.currentPaper.guts.title = $('#paperTitleBox').val();
-        nos2.currentPaper.guts.text = $('#paperTextBox').val();
-
-        const theDBID = await fireConnect.savePaperToDB(nos2.currentPaper);    //  send the Paper
+        const theDBID = nos2.currentPaper.save();
 
         await nos2.ui.update();
     },
@@ -280,11 +274,6 @@ nos2.userAction = {
 
         nos2.goToTabNumber(1);   //  the second tab; also causes update
 
-/*
-        if (iInJournal) {
-
-        }
-*/
     },
 
 

@@ -119,6 +119,8 @@ nos2.ui = {
         let tPaperCount = 0;
         let tRevisingCount = 0;
         let tDraftCount = 0;
+        let tPublishedCount = 0;
+
         let text = "<table><tr></th><th>title</th><th>status</th><th>team</th><th></th></tr>";
         let draftTable = "<table><tr><th>title</th><th>status</th><th>team</th><th></th></tr>";
         let revisingTable = "<table><tr><th>title</th><th>status</th><th>team</th><th></th></tr>";
@@ -151,6 +153,8 @@ nos2.ui = {
                     draftTable += "<td>" + (p.guts.teamCode ? nos2.theTeams[p.guts.teamCode].teamCode : "-") + "</td>";
                     draftTable += `<td><button onclick='nos2.ui.openPaper("${p.guts.dbid}")'>read</button></td>`
                     draftTable += "</tr>";
+                } else if (p.guts.status === nos2.constants.kPaperStatusPublished) {
+                    tPublishedCount++;
                 }
             });
         }
@@ -160,7 +164,7 @@ nos2.ui = {
         if (tPaperCount > 0) {
             tPapersDiv.innerHTML = "<p>"
                 + tPaperCount + (tPaperCount === 1 ? " paper " : " papers ")
-                + "to deal with</p>" + text;
+                + "to deal with (oldest at the top)</p>" + text;
         } else {
             tPapersDiv.innerHTML = "<p>Hooray! All caught up!</p>";
         }
@@ -178,10 +182,10 @@ nos2.ui = {
                 + tDraftCount + (tDraftCount === 1 ? " paper. " : " papers. ")
                 + "</p>" + draftTable;
         } else {
-            tDraftPapersDiv.innerHTML = "<p>No completed papers on the shelf.</p>";
+            tDraftPapersDiv.innerHTML = "<p>No scientists have saved drafts.</p>";
         }
 
-        if (tDraftCount + tRevisingCount + tPaperCount <= 0) {
+        if (tDraftCount + tRevisingCount + tPaperCount + tPublishedCount <= 0) {
             tPapersDiv.innerHTML = "<p>No papers ever. Stay tuned.</p>";
         }
     },

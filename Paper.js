@@ -48,7 +48,7 @@ class Paper {
                 figures: [],       //  array of dbids of Figures for This Paper
 
                 status: nos2.constants.kPaperStatusDraft,
-                submitTime : null,
+                lastUpdate : null,  //  most recent save time
                 pubYear: null,     //  publication epoch
                 pubTime: null,     //  the Date() when it was published; used for chron sorting
                 citation: null,      //  how we will be cited
@@ -186,6 +186,18 @@ class Paper {
         return this.guts.authors + " " + nos2.epoch;
     }
 
+    async save() {
+        this.guts.authors = document.getElementById("paperAuthorsBox").value;
+        this.guts.title = document.getElementById("paperTitleBox").value;
+        this.guts.text = document.getElementById("paperTextBox").value;
+
+        this.guts.lastUpdate = new Date();
+        const tPaperDBID = await fireConnect.savePaperToDB(nos2.currentPaper);
+
+        return tPaperDBID;
+
+    }
+
     async submit() {
         const tNewStatus =
             (this.guts.status === nos2.constants.kPaperStatusRevise) ?
@@ -193,14 +205,8 @@ class Paper {
                 nos2.constants.kPaperStatusSubmitted;
         this.guts.status = tNewStatus;
 
-        this.guts.authors = document.getElementById("paperAuthorsBox").value;
-        this.guts.title = document.getElementById("paperTitleBox").value;
-        this.guts.text = document.getElementById("paperTextBox").value;
-
-        this.submitTime = new Date();
-
-        const tPaperDBID = await fireConnect.savePaperToDB(nos2.currentPaper);
-
+        const tDBID = this.save();
+        return tDBID;
     }
 
     async publish() {
@@ -289,9 +295,9 @@ class Paper {
     static paperSorter(a, b) {
         if (a.pubTime && b.pubTime) {
             return (a.guts.pubTime.seconds - b.guts.pubTime.seconds);
-        } else if (a.submitTime && b.submitTime) {
-            return (a.guts.submitTime.seconds - b.guts.submitTime.seconds);
-        } else if (a.created && b.created) {
+        } else if (a.guts.lastUpdate && b.guts.lastUpdate) {
+            return (a.guts.lastUpdate.seconds - b.guts.lastUpdate.seconds);
+        } else if (a.guts.created && b.guts.created) {
             return (a.guts.created.seconds - b.guts.created.seconds);
         } else {
             return 0;

@@ -230,8 +230,15 @@ nos2.ui = {
     },
 
 
+    /**
+     * Called from `writerui.update()`
+     *
+     * @param tPapers
+     */
     installTableOfAllPapers: function (tPapers) {
         //  paper task table
+
+        tPapers.sort(Paper.paperSorter).reverse();  //  oldest at the bottom
 
         const tPaperDiv = document.getElementById("paperTaskTable");
 
