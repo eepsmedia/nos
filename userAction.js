@@ -119,6 +119,8 @@ nos2.userAction = {
             'jName': tJournalName,
             'scen': tScenario,
             'state': JSON.stringify(tGameState),
+            'created' : new Date(),
+            'latest' : new Date()
         });
 
         return theWorldData;

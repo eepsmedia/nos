@@ -265,7 +265,7 @@ fireConnect = {
      * @returns {Promise<null|*>}
      */
     joinWorld: async function (iWorldCode) {
-        this.thisWorldDR = this.worldsCR.doc(iWorldCode);
+        this.thisWorldDR = this.worldsCR.doc(iWorldCode);   //  world's document reference
 
         const snap = await this.thisWorldDR.get();
         if (snap.exists) {
@@ -277,7 +277,10 @@ fireConnect = {
             await nos2.restoreTeamsFiguresPapersResults(iWorldCode);
             this.subscribeToListeners();
 
-            return snap.data();     //  world data
+            await this.thisWorldDR.set({'latest' : new Date()}, {merge : true});      //  latest join
+            const theData = snap.data();
+
+            return theData;     //  world data
         }
         return null;
     },

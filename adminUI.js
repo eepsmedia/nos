@@ -125,13 +125,22 @@ nos2.ui = {
             const tWorldDiv = document.getElementById("godChooseWorldTable");
 
             if (tWorlds) {
-                let text = "<table><tr><th>code</th><th>nickname</th></tr>";
+                let text = "<table><tr><th>code</th><th>nickname</th><th>created</th><th>latest</th></tr>";
                 tWorlds.forEach(w => {
+                    const latest = w.latest;
+                    const createdDate = w.created ? this.getSuitableTimeDateStringFromTimestamp(w.created) : '-';
+                    const latestDate = w.latest ? this.getSuitableTimeDateStringFromTimestamp(w.latest) : '-';
+
                     console.log(`Admin lists world ${w.code}`);
-                    text += "<tr><td>" + w.code + "</td>"
-                        + `<td>${w.nickname}</td>
-                        <td><button onclick="nos2.userAction.makeOrJoinWorld(false,'${w.code}')">join</button>
-                        </td></tr>`;
+                    text +=
+                        `<tr>
+                            <td>${w.code}</td>
+                           <td>${w.nickname}</td>
+                           <td>${createdDate}</td>
+                           <td>${latestDate}</td>
+                           <td><button onclick="nos2.userAction.makeOrJoinWorld(false,'${w.code}')">join</button>
+                           </td>
+                        </tr>`;
                 });
                 text += "</table>";
                 tWorldDiv.innerHTML = text;
@@ -167,6 +176,16 @@ nos2.ui = {
                 univ.universeView.drawArray(worldState.truth);
             }
         }
+    },
+
+    getSuitableTimeDateStringFromTimestamp : function(iTS) {
+        const theDate = iTS.toDate();
+
+        const theDateString = theDate.toDateString();
+        const theTimeString = theDate.toTimeString().slice(0,8);
+        const today = new Date().toDateString();
+
+        return (today === theDateString) ? theTimeString : theDateString;
     },
 
     makeDelayTextFromTicks  : function( iTicks )    {
