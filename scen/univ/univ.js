@@ -50,7 +50,7 @@ let univ = {
     playPhase : null,
 
     constants : {
-        version : "2021a",
+        version : "2024a",
 
         kPhaseNoWorld : 20,
         kPhaseNoTeam : 30,
